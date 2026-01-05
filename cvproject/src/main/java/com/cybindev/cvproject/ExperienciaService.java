@@ -1,5 +1,12 @@
 package com.cybindev.cvproject;
 
-public interface ExperienciaService {
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
+public interface ExperienciaService {
+  ExperienciaResponseDTO getExperienciaById(Long id);
+
+  void addExperiencia(ExperienciaResponseDTO experienciaDTO);
+
+  Page<ExperienciaResponseDTO> getExperienciaList(Pageable pageable);
 }
