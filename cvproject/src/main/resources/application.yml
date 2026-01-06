@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: cvproject
+  datasource:
+    url: jdbc:postgresql://localhost:5432/nicocvdb
+    username: nicocvdbuser
+    password: Gardian@2
+    driver-class-name: org.postgresql.Driver
+    schema: cvdbnicoschema
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        default_schema: cvdbnicoschema
