@@ -3,24 +3,20 @@ package com.cybindev.cvproject;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Named;
 
 @Mapper(componentModel = "spring")
 public interface ExperienciaRequestMapper {
 
-  default Experiencia convertDTOToExperiencia(ExperienciaRequestDTO experienciaRequestDTO) {
-    if (experienciaRequestDTO == null) {
-      return null;
-    }
+  @Mapping(target = "puesto", source = "puesto")
+  @Mapping(target = "empresa", source = "empresa")
+  @Mapping(target = "descripcion", source = "descripcion")
+  @Mapping(target = "periodo", source = "periodo", qualifiedByName = "normalizePeriodo")
+  Experiencia convertDTOToExperiencia(ExperienciaRequestDTO experienciaRequestDTO);
 
-    Experiencia experiencia = new Experiencia();
-    experiencia.setPuesto(experienciaRequestDTO.puesto());
-    experiencia.setEmpresa(experienciaRequestDTO.empresa());
-    experiencia.setDescripcion(experienciaRequestDTO.descripcion());
-    experiencia.setPeriodo(normalizePeriodo(experienciaRequestDTO.periodo()));
-    return experiencia;
-  }
-
-  private static String normalizePeriodo(String rawPeriodo) {
+  @Named("normalizePeriodo")
+  default String normalizePeriodo(String rawPeriodo) {
     if (rawPeriodo == null) {
       return null;
     }
@@ -35,5 +31,4 @@ public interface ExperienciaRequestMapper {
 
     return rawPeriodo.trim();
   }
-
 }

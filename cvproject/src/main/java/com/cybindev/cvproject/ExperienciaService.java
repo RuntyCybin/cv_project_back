@@ -6,7 +6,7 @@ import org.springframework.data.domain.Pageable;
 public interface ExperienciaService {
   ExperienciaResponseDTO getExperienciaById(Long id);
 
-  void addExperiencia(ExperienciaResponseDTO experienciaDTO);
+  void addExperiencia(ExperienciaRequestDTO experienciaDTO);
 
   Page<ExperienciaResponseDTO> getExperienciaList(Pageable pageable);
 }

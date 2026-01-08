@@ -10,4 +10,8 @@ public interface ExperienciaRepo extends JpaRepository<Experiencia, Long> {
 
   Page<Experiencia> findAll(Pageable pageable);
 
+  Experiencia findById(long id);
+
+  Experiencia save(Experiencia experiencia);
+
 }
