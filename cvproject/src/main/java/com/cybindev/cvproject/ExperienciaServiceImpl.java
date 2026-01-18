@@ -10,10 +10,12 @@ import org.springframework.stereotype.Service;
 public class ExperienciaServiceImpl implements ExperienciaService {
 
   private final ExperienciaRepo experienciaRepo;
+  private final ExperienciaRequestMapper experienciaRequestMapper;
 
   public ExperienciaServiceImpl(
       ExperienciaRepo experienciaRepo) {
     this.experienciaRepo = experienciaRepo;
+    this.experienciaRequestMapper = new ExperienciaRequestMapperImpl();
   }
 
   @Override
@@ -38,13 +40,12 @@ public class ExperienciaServiceImpl implements ExperienciaService {
 
   @Override
   public Experiencia addExperiencia(ExperienciaRequestDTO experienciaDTO) {
-    Experiencia experiencia = new Experiencia();
-    experiencia.setPuesto(experienciaDTO.puesto());
-    experiencia.setEmpresa(experienciaDTO.empresa());
-    experiencia.setDescripcion(experienciaDTO.descripcion());
-    experiencia.setPeriodo(experienciaDTO.periodo());
+
+    Experiencia experiencia = experienciaRequestMapper.toEntity(experienciaDTO);
+
     Experiencia experienciaResultSave = experienciaRepo.save(experiencia);
     System.out.println("Saved experiencia: " + experienciaResultSave);
+
     return Optional
         .of(experienciaResultSave)
         .orElseThrow(() -> new RuntimeException("Error saving experiencia"));
