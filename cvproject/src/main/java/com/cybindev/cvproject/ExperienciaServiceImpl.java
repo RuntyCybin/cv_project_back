@@ -10,57 +10,76 @@ import org.springframework.stereotype.Service;
 public class ExperienciaServiceImpl implements ExperienciaService {
 
   private final ExperienciaRepo experienciaRepo;
-  private final ExperienciaResponseMapper experienciaResponseMapper;
-  private final ExperienciaRequestMapper experienciaRequestMapper;
 
   public ExperienciaServiceImpl(
-      ExperienciaRepo experienciaRepo,
-      ExperienciaResponseMapper experienciaMapper,
-      ExperienciaRequestMapper experienciaRequestMapper) {
+      ExperienciaRepo experienciaRepo) {
     this.experienciaRepo = experienciaRepo;
-    this.experienciaResponseMapper = experienciaMapper;
-    this.experienciaRequestMapper = experienciaRequestMapper;
   }
 
   @Override
   public ExperienciaResponseDTO getExperienciaById(Long id) {
     Optional<Experiencia> experiencia = experienciaRepo.findById(id);
-    System.out.println("Fetching experiencia with id: " + experiencia.get().getId());
+    System.out.println("Fetching experiencia con id: " + experiencia.get().getId());
 
-    Experiencia exp = new Experiencia();
-    exp.setId(1L);
-    exp.setPuesto("Desarrollador Java");
-    exp.setEmpresa("Tech Solutions");
-    exp.setPeriodo("Enero 2020 - Diciembre 2022");
-    exp.setDescripcion("Desarrollo de aplicaciones empresariales utilizando Java y Spring Boot.");
+    Experiencia foundExp = Optional.ofNullable(experiencia)
+        .map(exp -> experiencia.get())
+        .orElseThrow(() -> new RuntimeException("Experiencia no puede ser nula."));
 
     ExperienciaResponseDTO experienciaDTO = new ExperienciaResponseDTO(
-        exp.getPuesto(),
-        exp.getEmpresa(),
-        exp.getDescripcion(),
+        foundExp.getPuesto(),
+        foundExp.getEmpresa(),
+        foundExp.getDescripcion(),
         "02-2022",
         "12-2023");
 
-    System.out.println("Returning experiencia DTO: " + experienciaDTO);
+    System.out.println("Returning mock de experiencia DTO: " + experienciaDTO);
     return experienciaDTO;
-    /*
-     * return experiencia
-     * .map(experienciaResponseMapper::convertExperienciaToDTO)
-     * .orElseThrow(() -> new RuntimeException("Experiencia not found with id: " +
-     * id));
-     */
   }
 
   @Override
-  public void addExperiencia(ExperienciaRequestDTO experienciaDTO) {
+  public Experiencia addExperiencia(ExperienciaRequestDTO experienciaDTO) {
     Experiencia experiencia = new Experiencia();
-    experiencia = experienciaRequestMapper.convertDTOToExperiencia(experienciaDTO);
-    experienciaRepo.save(experiencia);
+    experiencia.setPuesto(experienciaDTO.puesto());
+    experiencia.setEmpresa(experienciaDTO.empresa());
+    experiencia.setDescripcion(experienciaDTO.descripcion());
+    experiencia.setPeriodo(experienciaDTO.periodo());
+    Experiencia experienciaResultSave = experienciaRepo.save(experiencia);
+    System.out.println("Saved experiencia: " + experienciaResultSave);
+    return Optional
+        .of(experienciaResultSave)
+        .orElseThrow(() -> new RuntimeException("Error saving experiencia"));
   }
 
   @Override
   public Page<ExperienciaResponseDTO> getExperienciaList(Pageable pageable) {
-    return experienciaRepo.findAll(pageable).map(experienciaResponseMapper::convertExperienciaToDTO);
+    return experienciaRepo.findAll(pageable)
+        .map(experiencia -> new ExperienciaResponseDTO(
+            experiencia.getPuesto(),
+            experiencia.getEmpresa(),
+            experiencia.getDescripcion(),
+            getFechas(experiencia.getPeriodo())[0],
+            getFechas(experiencia.getPeriodo())[1]));
   }
 
+  // periodo format: "MM-yyyy - MM-yyyy"
+  private String[] getFechas(String periodo) {
+    // lógica para extraer la fecha de inicio del periodo
+    String[] partesPeriodo = periodo.split(" - ");
+
+    String[] fechaInicio = partesPeriodo[0].split("-");
+    String mesInicio = fechaInicio[0];
+    String anioInicio = fechaInicio[1];
+
+    String[] fechaFinal = partesPeriodo[1].split("-");
+    String mesFin = fechaFinal[0];
+    String anioFin = fechaFinal[1];
+
+    if (Integer.parseInt(mesInicio) < Integer.parseInt(mesFin)
+        && Integer.parseInt(anioInicio) <= Integer.parseInt(anioFin)) {
+      return partesPeriodo;
+    }
+
+    // en caso de error, retornar una fecha por defecto
+    return new String[] { "01-1970", "01-1970" };
+  }
 }
