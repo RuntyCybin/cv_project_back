@@ -18,3 +18,6 @@ server:
   port: 8080
   servlet:
     context-path: /cv
+
+app:
+  title: CV Project Application

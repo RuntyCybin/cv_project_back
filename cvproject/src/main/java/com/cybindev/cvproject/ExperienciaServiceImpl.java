@@ -2,12 +2,16 @@ package com.cybindev.cvproject;
 
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ExperienciaServiceImpl implements ExperienciaService {
+
+  @Value("${app.title}")
+  private String title;
 
   private final ExperienciaRepo experienciaRepo;
   private final ExperienciaRequestMapper experienciaRequestMapper;
@@ -20,6 +24,7 @@ public class ExperienciaServiceImpl implements ExperienciaService {
 
   @Override
   public ExperienciaResponseDTO getExperienciaById(Long id) {
+    System.out.println("Proyecto " + title + ": Getting experiencia by id: " + id);
     Optional<Experiencia> experiencia = experienciaRepo.findById(id);
     System.out.println("Fetching experiencia con id: " + experiencia.get().getId());
 
