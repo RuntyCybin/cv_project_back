@@ -15,16 +15,19 @@ public class ExperienciaServiceImpl implements ExperienciaService {
 
   private final ExperienciaRepo experienciaRepo;
   private final ExperienciaRequestMapper experienciaRequestMapper;
+  private final ExperienciaResponseMapper experienciaResponseMapper;
 
   public ExperienciaServiceImpl(
       ExperienciaRepo experienciaRepo) {
     this.experienciaRepo = experienciaRepo;
     this.experienciaRequestMapper = new ExperienciaRequestMapperImpl();
+    this.experienciaResponseMapper = new ExperienciaResponseMapperImpl();
   }
 
   @Override
   public ExperienciaResponseDTO getExperienciaById(Long id) {
     System.out.println("Proyecto " + title + ": Getting experiencia by id: " + id);
+
     Optional<Experiencia> experiencia = experienciaRepo.findById(id);
     System.out.println("Fetching experiencia con id: " + experiencia.get().getId());
 
@@ -32,12 +35,7 @@ public class ExperienciaServiceImpl implements ExperienciaService {
         .map(exp -> experiencia.get())
         .orElseThrow(() -> new RuntimeException("Experiencia no puede ser nula."));
 
-    ExperienciaResponseDTO experienciaDTO = new ExperienciaResponseDTO(
-        foundExp.getPuesto(),
-        foundExp.getEmpresa(),
-        foundExp.getDescripcion(),
-        "02-2022",
-        "12-2023");
+    ExperienciaResponseDTO experienciaDTO = experienciaResponseMapper.toDto(foundExp);
 
     System.out.println("Returning mock de experiencia DTO: " + experienciaDTO);
     return experienciaDTO;
@@ -59,33 +57,6 @@ public class ExperienciaServiceImpl implements ExperienciaService {
   @Override
   public Page<ExperienciaResponseDTO> getExperienciaList(Pageable pageable) {
     return experienciaRepo.findAll(pageable)
-        .map(experiencia -> new ExperienciaResponseDTO(
-            experiencia.getPuesto(),
-            experiencia.getEmpresa(),
-            experiencia.getDescripcion(),
-            getFechas(experiencia.getPeriodo())[0],
-            getFechas(experiencia.getPeriodo())[1]));
-  }
-
-  // periodo format: "MM-yyyy - MM-yyyy"
-  private String[] getFechas(String periodo) {
-    // lógica para extraer la fecha de inicio del periodo
-    String[] partesPeriodo = periodo.split(" - ");
-
-    String[] fechaInicio = partesPeriodo[0].split("-");
-    String mesInicio = fechaInicio[0];
-    String anioInicio = fechaInicio[1];
-
-    String[] fechaFinal = partesPeriodo[1].split("-");
-    String mesFin = fechaFinal[0];
-    String anioFin = fechaFinal[1];
-
-    if (Integer.parseInt(mesInicio) < Integer.parseInt(mesFin)
-        && Integer.parseInt(anioInicio) <= Integer.parseInt(anioFin)) {
-      return partesPeriodo;
-    }
-
-    // en caso de error, retornar una fecha por defecto
-    return new String[] { "01-1970", "01-1970" };
+        .map(experiencia -> experienciaResponseMapper.toDto(experiencia));
   }
 }

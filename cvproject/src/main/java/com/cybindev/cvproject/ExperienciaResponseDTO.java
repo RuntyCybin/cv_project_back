@@ -6,5 +6,4 @@ public record ExperienciaResponseDTO(
     String descripcion,
     String fechaInicio,
     String fechaFin) {
-
 }
