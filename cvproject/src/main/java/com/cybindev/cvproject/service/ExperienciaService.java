@@ -3,9 +3,9 @@ package com.cybindev.cvproject.service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import com.cybindev.cvproject.ExperienciaRequestDTO;
-import com.cybindev.cvproject.ExperienciaResponseDTO;
 import com.cybindev.cvproject.domain.Experiencia;
+import com.cybindev.cvproject.domain.ExperienciaRequestDTO;
+import com.cybindev.cvproject.domain.ExperienciaResponseDTO;
 
 public interface ExperienciaService {
   ExperienciaResponseDTO getExperienciaById(Long id);

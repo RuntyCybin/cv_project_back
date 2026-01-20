@@ -1,11 +1,9 @@
-package com.cybindev.cvproject;
+package com.cybindev.cvproject.domain;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
 import org.mapstruct.Named;
-
-import com.cybindev.cvproject.domain.Experiencia;
 
 @Mapper
 public interface ExperienciaResponseMapper {

@@ -7,13 +7,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.cybindev.cvproject.ExperienciaRequestDTO;
-import com.cybindev.cvproject.ExperienciaRequestMapper;
-import com.cybindev.cvproject.ExperienciaRequestMapperImpl;
-import com.cybindev.cvproject.ExperienciaResponseDTO;
-import com.cybindev.cvproject.ExperienciaResponseMapper;
-import com.cybindev.cvproject.ExperienciaResponseMapperImpl;
 import com.cybindev.cvproject.domain.Experiencia;
+import com.cybindev.cvproject.domain.ExperienciaRequestDTO;
+import com.cybindev.cvproject.domain.ExperienciaRequestMapper;
+import com.cybindev.cvproject.domain.ExperienciaRequestMapperImpl;
+import com.cybindev.cvproject.domain.ExperienciaResponseDTO;
+import com.cybindev.cvproject.domain.ExperienciaResponseMapper;
+import com.cybindev.cvproject.domain.ExperienciaResponseMapperImpl;
 import com.cybindev.cvproject.repository.ExperienciaRepo;
 import com.cybindev.cvproject.service.ExperienciaService;
 

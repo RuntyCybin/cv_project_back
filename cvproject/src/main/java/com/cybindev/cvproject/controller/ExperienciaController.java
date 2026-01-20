@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cybindev.cvproject.ExperienciaRequestDTO;
-import com.cybindev.cvproject.ExperienciaResponseDTO;
+import com.cybindev.cvproject.domain.ExperienciaRequestDTO;
+import com.cybindev.cvproject.domain.ExperienciaResponseDTO;
 import com.cybindev.cvproject.service.ExperienciaService;
 
 @RestController
