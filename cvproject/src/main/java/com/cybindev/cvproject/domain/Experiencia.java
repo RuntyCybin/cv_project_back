@@ -1,4 +1,4 @@
-package com.cybindev.cvproject;
+package com.cybindev.cvproject.domain;
 
 import java.time.LocalDateTime;
 

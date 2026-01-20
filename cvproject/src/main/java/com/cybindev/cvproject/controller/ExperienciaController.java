@@ -1,4 +1,4 @@
-package com.cybindev.cvproject;
+package com.cybindev.cvproject.controller;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -10,6 +10,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.cybindev.cvproject.ExperienciaRequestDTO;
+import com.cybindev.cvproject.ExperienciaResponseDTO;
+import com.cybindev.cvproject.service.ExperienciaService;
 
 @RestController
 public class ExperienciaController {
@@ -32,11 +36,12 @@ public class ExperienciaController {
   }
 
   @GetMapping("/experiencia/{id}")
-  public String getExperienciaById(@PathVariable final Long id) {
+  public ResponseEntity<ExperienciaResponseDTO> getExperienciaById(@PathVariable final Long id) {
 
-    ExperienciaResponseDTO experiencia = experienciaService.getExperienciaById(id);
+    ExperienciaResponseDTO experienciaResponseDTO = experienciaService.getExperienciaById(id);
 
-    return "Experiencia en el puesto " + experiencia.puesto() + " details";
+    return ResponseEntity.status(HttpStatus.OK)
+        .body(experienciaResponseDTO);
   }
 
   @PostMapping("/add-experiencia")
