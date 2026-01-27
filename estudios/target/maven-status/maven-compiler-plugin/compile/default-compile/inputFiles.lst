@@ -1,1 +1,8 @@
+/Users/runtycybin/Dev/git/cv_project/back/cv_project_back/estudios/src/main/java/com/cybindev/estudios/service/impl/EstudioServiceImpl.java
 /Users/runtycybin/Dev/git/cv_project/back/cv_project_back/estudios/src/main/java/com/cybindev/estudios/EstudiosApplication.java
+/Users/runtycybin/Dev/git/cv_project/back/cv_project_back/estudios/src/main/java/com/cybindev/estudios/domain/Estudio.java
+/Users/runtycybin/Dev/git/cv_project/back/cv_project_back/estudios/src/main/java/com/cybindev/estudios/domain/EstudioRequestDTO.java
+/Users/runtycybin/Dev/git/cv_project/back/cv_project_back/estudios/src/main/java/com/cybindev/estudios/repo/EstudiosRepo.java
+/Users/runtycybin/Dev/git/cv_project/back/cv_project_back/estudios/src/main/java/com/cybindev/estudios/controller/EstudiosController.java
+/Users/runtycybin/Dev/git/cv_project/back/cv_project_back/estudios/src/main/java/com/cybindev/estudios/service/EstudioService.java
+/Users/runtycybin/Dev/git/cv_project/back/cv_project_back/estudios/src/main/java/com/cybindev/estudios/domain/EstudioResponseDTO.java

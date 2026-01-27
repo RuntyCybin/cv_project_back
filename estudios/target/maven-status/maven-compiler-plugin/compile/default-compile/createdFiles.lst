@@ -1,1 +1,8 @@
+com/cybindev/estudios/controller/EstudiosController.class
+com/cybindev/estudios/domain/EstudioRequestDTO.class
 com/cybindev/estudios/EstudiosApplication.class
+com/cybindev/estudios/domain/Estudio.class
+com/cybindev/estudios/service/impl/EstudioServiceImpl.class
+com/cybindev/estudios/repo/EstudiosRepo.class
+com/cybindev/estudios/domain/EstudioResponseDTO.class
+com/cybindev/estudios/service/EstudioService.class
