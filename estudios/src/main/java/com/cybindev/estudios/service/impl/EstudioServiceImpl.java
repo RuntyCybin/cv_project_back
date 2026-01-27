@@ -21,21 +21,22 @@ public class EstudioServiceImpl implements EstudioService<EstudioResponseDTO, Es
 
   @Override
   public List<EstudioResponseDTO> listarEstudios() {
-    throw new RuntimeException("Simulated service failure for testing fallback");
-    /*
-     * System.out.println("Listing all estudios from the database");
-     * List<Estudio> estudios = repo.findAll();
-     * System.out.println("Found " + estudios.size() + " estudios in the database");
-     * return estudios.stream()
-     * .map(estudio -> new EstudioResponseDTO(
-     * estudio.getId(),
-     * estudio.getTitulo(),
-     * estudio.getInstitucion(),
-     * estudio.getPeriodo(),
-     * estudio.getDescripcion(),
-     * estudio.getCursos()))
-     * .toList();
-     */
+    System.out.println("Listing all estudios from the database");
+    List<Estudio> estudios = repo.findAll();
+    System.out.println("Found " + estudios.size() + " estudios in the database");
+    if (estudios.size() == 0) {
+      throw new RuntimeException("Service failure for testing fallback");
+    }
+
+    return estudios.stream()
+        .map(estudio -> new EstudioResponseDTO(
+            estudio.getId(),
+            estudio.getTitulo(),
+            estudio.getInstitucion(),
+            estudio.getPeriodo(),
+            estudio.getDescripcion(),
+            estudio.getCursos()))
+        .toList();
   }
 
   @Override
