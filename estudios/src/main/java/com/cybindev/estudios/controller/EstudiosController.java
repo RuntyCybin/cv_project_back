@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cybindev.estudios.domain.EstudioRequestDTO;
@@ -12,6 +14,7 @@ import com.cybindev.estudios.domain.EstudioResponseDTO;
 import com.cybindev.estudios.service.EstudioService;
 
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import jakarta.annotation.PostConstruct;
 
 @RestController
 public class EstudiosController {
@@ -22,14 +25,31 @@ public class EstudiosController {
     this.estudioService = estudioService;
   }
 
+  @PostConstruct
+  public void init() {
+    System.out.println("Estudios Controller initialized");
+  }
+
+  /*
+   * ------------------------------------------
+   * HEALTH CHECK
+   * ------------------------------------------
+   */
   @GetMapping
   public ResponseEntity<String> health() {
     return ResponseEntity.status(HttpStatus.OK)
         .body("Estudios controller is healthy");
   }
+  /*
+   * ------------------------------------------
+   * !HEALTH CHECK
+   * ------------------------------------------
+   */
 
   /*
+   * ------------------------------------------
    * GET ALL ESTUDIOS
+   * ------------------------------------------
    */
   @GetMapping("/getEstudios")
   @CircuitBreaker(name = "estudiosService", fallbackMethod = "fallbackGetAll")
@@ -51,7 +71,26 @@ public class EstudiosController {
         .body(List.of(fallbackResponse));
   }
   /*
+   * ------------------------------------------
    * !GET ALL ESTUDIOS
+   * ------------------------------------------
+   */
+
+  /*
+   * ------------------------------------------
+   * POST ESTUDIO
+   * ------------------------------------------
+   */
+  @PostMapping("/postEstudio")
+  public ResponseEntity<EstudioResponseDTO> postEstudio(@RequestBody EstudioRequestDTO estudio) {
+    EstudioResponseDTO creado = estudioService.crearEstudio(estudio);
+    return ResponseEntity.status(HttpStatus.CREATED)
+        .body(creado);
+  }
+  /*
+   * ------------------------------------------
+   * !POST ESTUDIO
+   * ------------------------------------------
    */
 
 }
