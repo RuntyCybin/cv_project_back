@@ -57,10 +57,6 @@ public class EstudioServiceImpl implements EstudioService<EstudioResponseDTO, Es
     nuevoEstudio.setDescripcion(estudioDto.descripcion());
     nuevoEstudio.setCursos(estudioDto.cursos());
 
-    System.out.println(":::::::::nuevoEstudio: " + nuevoEstudio.getCreatedAt());
-    System.out.println(":::::::::nuevoEstudio: " + nuevoEstudio.getUpdatedAt());
-    System.out.println(":::::::::nuevoEstudio: " + nuevoEstudio.getCursos());
-
     Estudio guardado = repo.save(nuevoEstudio);
     if (guardado == null) {
       throw new RuntimeException("Service Failed to save Estudio");
