@@ -22,7 +22,7 @@ public class EstudiosController {
 
   private final EstudioService<EstudioResponseDTO, EstudioRequestDTO> estudioService;
 
-  public EstudiosController(EstudioService estudioService) {
+  public EstudiosController(EstudioService<EstudioResponseDTO, EstudioRequestDTO> estudioService) {
     this.estudioService = estudioService;
   }
 
