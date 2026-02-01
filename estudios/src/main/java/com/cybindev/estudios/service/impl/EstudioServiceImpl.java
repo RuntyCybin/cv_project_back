@@ -6,7 +6,11 @@ import org.springframework.stereotype.Service;
 
 import com.cybindev.estudios.domain.Estudio;
 import com.cybindev.estudios.domain.EstudioRequestDTO;
+import com.cybindev.estudios.domain.EstudioRequestMapper;
+import com.cybindev.estudios.domain.EstudioRequestMapperImpl;
 import com.cybindev.estudios.domain.EstudioResponseDTO;
+import com.cybindev.estudios.domain.EstudioResponseMapper;
+import com.cybindev.estudios.domain.EstudioResponseMapperImpl;
 import com.cybindev.estudios.repo.EstudiosRepo;
 import com.cybindev.estudios.service.EstudioService;
 
@@ -14,9 +18,13 @@ import com.cybindev.estudios.service.EstudioService;
 public class EstudioServiceImpl implements EstudioService<EstudioResponseDTO, EstudioRequestDTO> {
 
   private final EstudiosRepo repo;
+  private final EstudioRequestMapper mapperRequest;
+  private final EstudioResponseMapper mapperResponse;
 
   EstudioServiceImpl(EstudiosRepo repo) {
     this.repo = repo;
+    this.mapperRequest = new EstudioRequestMapperImpl();
+    this.mapperResponse = new EstudioResponseMapperImpl();
   }
 
   /*
@@ -48,25 +56,13 @@ public class EstudioServiceImpl implements EstudioService<EstudioResponseDTO, Es
   @Override
   public EstudioResponseDTO crearEstudio(EstudioRequestDTO estudioDto) {
     System.out.println("Creating a new estudio in the database");
-    Estudio nuevoEstudio = new Estudio();
-
-    nuevoEstudio.setTitulo(estudioDto.titulo());
-    nuevoEstudio.setInstitucion(estudioDto.institucion());
-    nuevoEstudio.setPeriodo(estudioDto.periodo());
-    nuevoEstudio.setDescripcion(estudioDto.descripcion());
-    nuevoEstudio.setCursos(estudioDto.cursos());
-
+    Estudio nuevoEstudio = this.mapperRequest.toEntity(estudioDto);
     Estudio guardado = repo.save(nuevoEstudio);
     if (guardado == null) {
       throw new RuntimeException("Service Failed to save Estudio");
     }
-    return new EstudioResponseDTO(
-        guardado.getId(),
-        guardado.getTitulo(),
-        guardado.getInstitucion(),
-        guardado.getPeriodo(),
-        guardado.getDescripcion(),
-        guardado.getCursos());
+
+    return this.mapperResponse.toDto(guardado);
   }
 
   /*
