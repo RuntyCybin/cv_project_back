@@ -12,6 +12,7 @@
   </parent>
 
   <artifactId>estudios</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
   <name>estudios</name>
   <description>Modulo para gestiornar los estudios</description>
   <packaging>jar</packaging>
@@ -77,23 +78,26 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.11.0</version>
         <configuration>
-          <source>${java.version}</source>
-          <target>${java.version}</target>
           <annotationProcessorPaths>
             <path>
-              <groupId>org.mapstruct</groupId>
-              <artifactId>mapstruct-processor</artifactId>
-              <version>${mapstruct.version}</version>
+              <groupId>org.projectlombok</groupId>
+              <artifactId>lombok</artifactId>
             </path>
           </annotationProcessorPaths>
         </configuration>
       </plugin>
-
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
+        <configuration>
+          <excludes>
+            <exclude>
+              <groupId>org.projectlombok</groupId>
+              <artifactId>lombok</artifactId>
+            </exclude>
+          </excludes>
+        </configuration>
       </plugin>
     </plugins>
   </build>
