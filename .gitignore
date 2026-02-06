@@ -30,12 +30,12 @@ build/
 !**/src/test/**/build/
 
 ### VS Code ###
-.vscode/
+.vscode/settings.xml
 
 mvnw
 maven-wrapper.properties
 mvnw.cmd
-settings.xml
+
 .gitatributes
 .DS_Store
 *.class
@@ -45,4 +45,3 @@ settings.xml
 *.ear
 /target/
 settings.xml
-.gitatributes
