@@ -28,7 +28,7 @@ public class EstudioServiceImpl implements EstudioService<EstudioResponseDTO, Es
   }
 
   /*
-   * All Estudios Listing
+   * Listar todos los estudios
    */
   @Override
   public List<EstudioResponseDTO> listarEstudios() {
@@ -36,17 +36,10 @@ public class EstudioServiceImpl implements EstudioService<EstudioResponseDTO, Es
     List<Estudio> estudios = repo.findAll();
     System.out.println("Found " + estudios.size() + " estudios in the database");
     if (estudios.size() == 0) {
-      throw new RuntimeException("Service failure for listing estudios");
+      throw new RuntimeException("No se han recogido estudios");
     }
-
     return estudios.stream()
-        .map(estudio -> new EstudioResponseDTO(
-            estudio.getId(),
-            estudio.getTitulo(),
-            estudio.getInstitucion(),
-            estudio.getPeriodo(),
-            estudio.getDescripcion(),
-            estudio.getCursos()))
+        .map(estudio -> this.mapperResponse.toDto(estudio))
         .toList();
   }
 
@@ -70,19 +63,14 @@ public class EstudioServiceImpl implements EstudioService<EstudioResponseDTO, Es
    */
   @Override
   public EstudioResponseDTO obtenerEstudioPorId(Long id) {
+    System.out.println("Obteniendo estudio con id: " + id);
     Estudio estudio = repo.findById(id)
         .orElseThrow(() -> new RuntimeException("Estudio not found with id: " + id));
 
     if (estudio == null) {
       throw new RuntimeException("Service failure to obtain an Estudio");
     }
-    return new EstudioResponseDTO(
-        estudio.getId(),
-        estudio.getTitulo(),
-        estudio.getInstitucion(),
-        estudio.getPeriodo(),
-        estudio.getDescripcion(),
-        estudio.getCursos());
+    return this.mapperResponse.toDto(estudio);
   }
 
 }

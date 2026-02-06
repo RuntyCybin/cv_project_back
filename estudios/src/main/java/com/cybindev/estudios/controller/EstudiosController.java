@@ -110,7 +110,7 @@ public class EstudiosController {
 
   /*
    * ------------------------------------------
-   * GET ESTUDIO
+   * GET ESTUDIO BY ID
    * ------------------------------------------
    */
   @GetMapping("/getEstudio/{id}")
