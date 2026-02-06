@@ -44,3 +44,5 @@ settings.xml
 *.war
 *.ear
 /target/
+settings.xml
+.gitatributes
