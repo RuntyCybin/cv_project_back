@@ -31,3 +31,16 @@ build/
 
 ### VS Code ###
 .vscode/
+
+mvnw
+maven-wrapper.properties
+mvnw.cmd
+settings.xml
+.gitatributes
+.DS_Store
+*.class
+*.log
+*.jar
+*.war
+*.ear
+/target/
