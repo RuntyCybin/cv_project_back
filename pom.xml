@@ -23,8 +23,8 @@
 		<module>experiencias</module>
 		<module>estudios</module>
 		<module>cursos</module>
-        <module>projects</module>
-    </modules>
+		<module>projects</module>
+	</modules>
 
 	<properties>
 		<maven.compiler.source>21</maven.compiler.source>

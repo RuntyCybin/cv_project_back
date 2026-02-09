@@ -51,7 +51,7 @@ public class CursosController {
   /*
    * ------------------------------------------
    * GET ALL CURSOS
-   * ------------------------------------------
+   * ---------------------------a---------------
    */
   @GetMapping("/getCursos")
   @CircuitBreaker(name = "getAllCursosService", fallbackMethod = "fallbackGetAll")

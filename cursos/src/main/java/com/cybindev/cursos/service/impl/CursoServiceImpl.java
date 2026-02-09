@@ -30,8 +30,8 @@ public class CursoServiceImpl implements CursoService<CursoResponseDTO, CursoReq
   @Override
   public CursoResponseDTO crearCurso(CursoRequestDTO curso) {
     System.out.println("Creando un nuevo curso en la base de datos");
-    Curso nuevoCurso = this.requestMapper.toEntity(curso);
-    Curso guardado = repo.save(nuevoCurso);
+    final Curso nuevoCurso = this.requestMapper.toEntity(curso);
+    final Curso guardado = this.repo.save(nuevoCurso);
     if (guardado == null) {
       throw new RuntimeException("El servicio ha fallado al guardar el curso");
     }
@@ -42,21 +42,21 @@ public class CursoServiceImpl implements CursoService<CursoResponseDTO, CursoReq
   @Override
   public CursoResponseDTO obtenerCursoPorId(Long id) {
     System.out.println("Obteniendo curso con id: " + id);
-    Curso curso = repo.findById(id)
-        .orElseThrow(() -> new RuntimeException("Curso no encontrado con id: " + id));
-    return responseMapper.toDto(curso);
+    final Curso curso = this.repo.findById(id)
+            .orElseThrow(() -> new RuntimeException("Curso no encontrado con id: " + id));
+    return this.responseMapper.toDto(curso);
   }
 
   @Override
   public List<CursoResponseDTO> listarCursos() {
     System.out.println("Listado de cursos de la base de datos");
-    List<Curso> cursos = repo.findAll();
+    final List<Curso> cursos = this.repo.findAll();
     if (cursos.size() == 0) {
       throw new RuntimeException("No se han recogido cursos");
     }
     return cursos.stream()
-        .map(curso -> this.responseMapper.toDto(curso))
-        .toList();
+            .map(this.responseMapper::toDto)
+            .toList();
   }
 
 }
