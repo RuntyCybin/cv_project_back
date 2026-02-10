@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cybindev.cursos.domain.Curso;
 import com.cybindev.cursos.domain.CursoRequestDTO;
 import com.cybindev.cursos.domain.CursoResponseDTO;
 import com.cybindev.cursos.service.CursoService;
