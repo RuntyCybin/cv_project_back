@@ -36,7 +36,7 @@ mvnw
 maven-wrapper.properties
 mvnw.cmd
 settings.xml
-.gitatributes
+.gitattributes
 .DS_Store
 *.class
 *.log

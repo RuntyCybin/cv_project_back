@@ -24,6 +24,7 @@
 		<module>estudios</module>
 		<module>cursos</module>
 		<module>projects</module>
+		<module>persona</module>
 	</modules>
 
 	<properties>

@@ -33,14 +33,13 @@ public class ProjectController {
   @GetMapping
   public ResponseEntity<String> health() {
     return ResponseEntity.status(HttpStatus.OK)
-            .body("Proyectos controller is healthy");
+        .body("Proyectos controller is healthy");
   }
   /*
    * ------------------------------------------
    * !HEALTH CHECK
    * ------------------------------------------
    */
-
 
   /*
    * ------------------------------------------
@@ -51,17 +50,17 @@ public class ProjectController {
   @CircuitBreaker(name = "getAllProyectosService", fallbackMethod = "fallBackGetAllProyectos")
   public ResponseEntity<List<ProyectoResponseDTO>> getProyectos() {
     return ResponseEntity.status(HttpStatus.OK)
-            .body(this.service.listarProyectos());
+        .body(this.service.listarProyectos());
   }
 
   public ResponseEntity<List<ProyectoResponseDTO>> fallBackGetAllProyectos(Throwable throwable) {
     return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
-            .body(List.of(new ProyectoResponseDTO(
-                    -1L,
-                    "Fallback GetAll Proyectos",
-                    "N/A",
-                    "No se han podido obtener los proyectos",
-                    "N/A")));
+        .body(List.of(new ProyectoResponseDTO(
+            -1L,
+            "Fallback GetAll Proyectos",
+            "N/A",
+            "No se han podido obtener los proyectos",
+            "N/A")));
   }
   /*
    * ------------------------------------------
@@ -79,17 +78,18 @@ public class ProjectController {
   public ResponseEntity<ProyectoResponseDTO> postProyecto(@RequestBody ProyectoRequestDTO request) {
     final ProyectoResponseDTO response = this.service.crearProyecto(request);
     return ResponseEntity.status(HttpStatus.OK)
-            .body(response);
+        .body(response);
   }
 
-  public ResponseEntity<ProyectoResponseDTO> fallBackCreateProyecto(@RequestBody ProyectoRequestDTO request, Throwable throwable) {
+  public ResponseEntity<ProyectoResponseDTO> fallBackCreateProyecto(@RequestBody ProyectoRequestDTO request,
+      Throwable throwable) {
     return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
-            .body(new ProyectoResponseDTO(
-                    -1L,
-                    "Fallback Create Proyecto",
-                    "N/A",
-                    "No se han podido crear el proyecto",
-                    "N/A"));
+        .body(new ProyectoResponseDTO(
+            -1L,
+            "Fallback Create Proyecto",
+            "N/A",
+            "No se han podido crear el proyecto",
+            "N/A"));
   }
   /*
    * ------------------------------------------
@@ -107,18 +107,18 @@ public class ProjectController {
   public ResponseEntity<ProyectoResponseDTO> getCursoPorId(@PathVariable Long id) {
     final ProyectoResponseDTO response = this.service.obtenerProyectoPorId(id);
     return ResponseEntity
-            .status(HttpStatus.OK)
-            .body(response);
+        .status(HttpStatus.OK)
+        .body(response);
   }
 
   public ResponseEntity<ProyectoResponseDTO> fallBackGetProyectoPorId(@PathVariable Long id, Throwable throwable) {
     return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
-            .body(new ProyectoResponseDTO(
-                    -1L,
-                    "Fallback Get Proyecto",
-                    "N/A",
-                    "No se ha podido obtener el proyecto por su id",
-                    "N/A"));
+        .body(new ProyectoResponseDTO(
+            -1L,
+            "Fallback Get Proyecto",
+            "N/A",
+            "No se ha podido obtener el proyecto por su id",
+            "N/A"));
   }
   /*
    * ------------------------------------------
