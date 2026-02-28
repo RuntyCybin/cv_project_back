@@ -7,10 +7,8 @@ import org.springframework.stereotype.Service;
 import com.cybindev.estudios.domain.Estudio;
 import com.cybindev.estudios.domain.EstudioRequestDTO;
 import com.cybindev.estudios.domain.EstudioRequestMapper;
-import com.cybindev.estudios.domain.EstudioRequestMapperImpl;
 import com.cybindev.estudios.domain.EstudioResponseDTO;
 import com.cybindev.estudios.domain.EstudioResponseMapper;
-import com.cybindev.estudios.domain.EstudioResponseMapperImpl;
 import com.cybindev.estudios.repo.EstudiosRepo;
 import com.cybindev.estudios.service.EstudioService;
 
@@ -21,10 +19,11 @@ public class EstudioServiceImpl implements EstudioService<EstudioResponseDTO, Es
   private final EstudioRequestMapper mapperRequest;
   private final EstudioResponseMapper mapperResponse;
 
-  EstudioServiceImpl(EstudiosRepo repo) {
+  EstudioServiceImpl(EstudiosRepo repo, EstudioRequestMapper mapperRequest,
+      EstudioResponseMapper mapperResponse) {
     this.repo = repo;
-    this.mapperRequest = new EstudioRequestMapperImpl();
-    this.mapperResponse = new EstudioResponseMapperImpl();
+    this.mapperRequest = mapperRequest;
+    this.mapperResponse = mapperResponse;
   }
 
   /*

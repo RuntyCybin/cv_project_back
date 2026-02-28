@@ -10,15 +10,13 @@ import org.springframework.stereotype.Service;
 import com.cybindev.cvproject.domain.Experiencia;
 import com.cybindev.cvproject.domain.ExperienciaRequestDTO;
 import com.cybindev.cvproject.domain.ExperienciaRequestMapper;
-import com.cybindev.cvproject.domain.ExperienciaRequestMapperImpl;
 import com.cybindev.cvproject.domain.ExperienciaResponseDTO;
 import com.cybindev.cvproject.domain.ExperienciaResponseMapper;
-import com.cybindev.cvproject.domain.ExperienciaResponseMapperImpl;
 import com.cybindev.cvproject.repository.ExperienciaRepo;
 import com.cybindev.cvproject.service.ExperienciaService;
 
 @Service
-public class ExperienciaServiceImpl implements ExperienciaService {
+public class ExperienciaServiceImpl implements ExperienciaService<ExperienciaResponseDTO, ExperienciaRequestDTO> {
 
   @Value("${app.title}")
   private String title;
@@ -27,11 +25,11 @@ public class ExperienciaServiceImpl implements ExperienciaService {
   private final ExperienciaRequestMapper experienciaRequestMapper;
   private final ExperienciaResponseMapper experienciaResponseMapper;
 
-  public ExperienciaServiceImpl(
-      ExperienciaRepo experienciaRepo) {
+  public ExperienciaServiceImpl(ExperienciaRepo experienciaRepo, ExperienciaRequestMapper experienciaRequestMapper,
+      ExperienciaResponseMapper experienciaResponseMapper) {
     this.experienciaRepo = experienciaRepo;
-    this.experienciaRequestMapper = new ExperienciaRequestMapperImpl();
-    this.experienciaResponseMapper = new ExperienciaResponseMapperImpl();
+    this.experienciaRequestMapper = experienciaRequestMapper;
+    this.experienciaResponseMapper = experienciaResponseMapper;
   }
 
   @Override
@@ -52,15 +50,15 @@ public class ExperienciaServiceImpl implements ExperienciaService {
   }
 
   @Override
-  public Experiencia addExperiencia(ExperienciaRequestDTO experienciaDTO) {
+  public ExperienciaResponseDTO addExperiencia(ExperienciaRequestDTO experienciaDTO) {
 
     Experiencia experiencia = experienciaRequestMapper.toEntity(experienciaDTO);
 
     Experiencia experienciaResultSave = experienciaRepo.save(experiencia);
+    ExperienciaResponseDTO experienciaResponseDTO = experienciaResponseMapper.toDto(experienciaResultSave);
     System.out.println("Saved experiencia: " + experienciaResultSave);
 
-    return Optional
-        .of(experienciaResultSave)
+    return Optional.of(experienciaResponseDTO)
         .orElseThrow(() -> new RuntimeException("Error saving experiencia"));
   }
 
