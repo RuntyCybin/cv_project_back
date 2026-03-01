@@ -8,7 +8,6 @@ public class CvprojectApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(CvprojectApplication.class, args);
-		System.out.println("Application Started Successfully");
 	}
 
 }

@@ -20,7 +20,7 @@ public class ExperienciaController {
 
   private final ExperienciaService<ExperienciaResponseDTO, ExperienciaRequestDTO> experienciaService;
 
-  ExperienciaController(ExperienciaService<ExperienciaResponseDTO, ExperienciaRequestDTO> experienciaService) {
+  public ExperienciaController(ExperienciaService<ExperienciaResponseDTO, ExperienciaRequestDTO> experienciaService) {
     this.experienciaService = experienciaService;
   }
 

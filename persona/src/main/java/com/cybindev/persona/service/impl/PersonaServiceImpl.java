@@ -2,6 +2,7 @@ package com.cybindev.persona.service.impl;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.cybindev.persona.domain.Persona;
@@ -14,6 +15,9 @@ import com.cybindev.persona.service.PersonaService;
 
 @Service
 public class PersonaServiceImpl implements PersonaService<PersonaResponseDTO, PersonaRequestDTO> {
+
+  @Value("${app.title}")
+  private String title;
 
   private final PersonaRepo personalRepo;
   private final PersonaRequestMapper personaRequestMapper;

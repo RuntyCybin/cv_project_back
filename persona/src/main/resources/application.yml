@@ -20,7 +20,7 @@ server:
     context-path: /cv
 
 app:
-  title: CV Project Application
+  title: Modulo de datos de la persona
 
 resilience4j:
   circuitbreaker:

@@ -1,20 +1,20 @@
 package com.cybindev.domain;
 
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.Mappings;
+import org.springframework.stereotype.Component;
 
-@Mapper
-public interface ProyectoRequestMapper {
+@Component
+public class ProyectoRequestMapper {
 
-  @Mappings({
-          @Mapping(target = "id", ignore = true),
-          @Mapping(target = "titulo", source = "dto.titulo"),
-          @Mapping(target = "periodo", source = "dto.periodo"),
-          @Mapping(target = "descripcion", source = "dto.descripcion"),
-          @Mapping(target = "consultora", source = "dto.consultora"),
-          @Mapping(target = "createdAt", ignore = true),
-          @Mapping(target = "updatedAt", ignore = true)
-  })
-  Project toEntity(ProyectoRequestDTO dto);
+  public Project toEntity(ProyectoRequestDTO dto) {
+    if (dto == null) {
+      return null;
+    }
+
+    Project project = new Project();
+    project.setTitulo(dto.titulo());
+    project.setPeriodo(dto.periodo());
+    project.setDescripcion(dto.descripcion());
+    project.setConsultora(dto.consultora());
+    return project;
+  }
 }
