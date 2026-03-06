@@ -2,7 +2,11 @@ package com.cybindev.persona.service.impl;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import com.cybindev.persona.domain.Persona;
@@ -19,6 +23,7 @@ public class PersonaServiceImpl implements PersonaService<PersonaResponseDTO, Pe
   @Value("${app.title}")
   private String title;
 
+  private static final Logger logger = LoggerFactory.getLogger(PersonaServiceImpl.class);
   private final PersonaRepo personalRepo;
   private final PersonaRequestMapper personaRequestMapper;
   private final PersonaResponseMapper personaResponseMapper;
@@ -31,16 +36,18 @@ public class PersonaServiceImpl implements PersonaService<PersonaResponseDTO, Pe
   }
 
   @Override
+  @CachePut(value = "personaCache", key = "#result.id")
   public PersonaResponseDTO crearPersona(PersonaRequestDTO personaDto) {
-    System.out.println("Servicio crear persona");
+    logger.info("Servicio crear persona");
     Persona persona = this.personaRequestMapper.toPersona(personaDto);
     Persona saved = this.personalRepo.save(persona);
     return this.personaResponseMapper.toDTO(saved);
   }
 
   @Override
+  @Cacheable(value = "personaCache", key = "#id")
   public PersonaResponseDTO obtenerPersonaPorId(Long id) {
-    System.out.println("Servicio obtener persona por id: " + id);
+    logger.info("Servicio obtener persona por id: " + id);
     Persona persona = this.personalRepo.findById(id)
         .orElseThrow(() -> new RuntimeException("Persona no encontrada con id: " + id));
     return this.personaResponseMapper.toDTO(persona);
@@ -48,7 +55,7 @@ public class PersonaServiceImpl implements PersonaService<PersonaResponseDTO, Pe
 
   @Override
   public List<PersonaResponseDTO> listarPersona() {
-    System.out.println("Servicio listar personas");
+    logger.info("Servicio listar personas");
     List<Persona> personas = this.personalRepo.findAll();
     return personas.stream()
         .map(this.personaResponseMapper::toDTO)
