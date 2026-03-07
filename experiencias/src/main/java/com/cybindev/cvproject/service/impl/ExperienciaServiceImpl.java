@@ -3,6 +3,8 @@ package com.cybindev.cvproject.service.impl;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -33,6 +35,7 @@ public class ExperienciaServiceImpl implements ExperienciaService<ExperienciaRes
   }
 
   @Override
+  @Cacheable(value = "experienciaCache", key = "#id")
   public ExperienciaResponseDTO getExperienciaById(Long id) {
     System.out.println("Proyecto " + title + ": Getting experiencia by id: " + id);
 
@@ -50,6 +53,7 @@ public class ExperienciaServiceImpl implements ExperienciaService<ExperienciaRes
   }
 
   @Override
+  @CachePut(value = "experienciaCache", key = "#result.id")
   public ExperienciaResponseDTO addExperiencia(ExperienciaRequestDTO experienciaDTO) {
 
     Experiencia experiencia = experienciaRequestMapper.toEntity(experienciaDTO);

@@ -47,4 +47,3 @@ logging:
     org.springframework.cache: TRACE
     org.springframework.data.redis: DEBUG
     io.github.resilience4j: DEBUG
-    
