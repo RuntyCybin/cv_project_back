@@ -2,6 +2,8 @@ package com.cybindev.cvproject.service.impl;
 
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
@@ -23,6 +25,7 @@ public class ExperienciaServiceImpl implements ExperienciaService<ExperienciaRes
   @Value("${app.title}")
   private String title;
 
+  private static final Logger logger = LoggerFactory.getLogger(ExperienciaServiceImpl.class);
   private final ExperienciaRepo experienciaRepo;
   private final ExperienciaRequestMapper experienciaRequestMapper;
   private final ExperienciaResponseMapper experienciaResponseMapper;
@@ -37,10 +40,10 @@ public class ExperienciaServiceImpl implements ExperienciaService<ExperienciaRes
   @Override
   @Cacheable(value = "experienciaCache", key = "#id")
   public ExperienciaResponseDTO getExperienciaById(Long id) {
-    System.out.println("Proyecto " + title + ": Getting experiencia by id: " + id);
+    logger.info("Proyecto " + title + ": Getting experiencia by id: " + id);
 
     Optional<Experiencia> experiencia = experienciaRepo.findById(id);
-    System.out.println("Fetching experiencia con id: " + experiencia.get().getId());
+    logger.info("Fetching experiencia con id: " + experiencia.get().getId());
 
     Experiencia foundExp = Optional.ofNullable(experiencia)
         .map(exp -> experiencia.get())
@@ -48,7 +51,7 @@ public class ExperienciaServiceImpl implements ExperienciaService<ExperienciaRes
 
     ExperienciaResponseDTO experienciaDTO = experienciaResponseMapper.toDto(foundExp);
 
-    System.out.println("Returning mock de experiencia DTO: " + experienciaDTO);
+    logger.info("Returning mock de experiencia DTO: " + experienciaDTO);
     return experienciaDTO;
   }
 
@@ -60,7 +63,7 @@ public class ExperienciaServiceImpl implements ExperienciaService<ExperienciaRes
 
     Experiencia experienciaResultSave = experienciaRepo.save(experiencia);
     ExperienciaResponseDTO experienciaResponseDTO = experienciaResponseMapper.toDto(experienciaResultSave);
-    System.out.println("Saved experiencia: " + experienciaResultSave);
+    logger.info("Saved experiencia: " + experienciaResultSave);
 
     return Optional.of(experienciaResponseDTO)
         .orElseThrow(() -> new RuntimeException("Error saving experiencia"));
