@@ -18,9 +18,9 @@ import com.cybindev.cvproject.service.ExperienciaService;
 @RestController
 public class ExperienciaController {
 
-  private final ExperienciaService experienciaService;
+  private final ExperienciaService<ExperienciaResponseDTO, ExperienciaRequestDTO> experienciaService;
 
-  ExperienciaController(ExperienciaService experienciaService) {
+  public ExperienciaController(ExperienciaService<ExperienciaResponseDTO, ExperienciaRequestDTO> experienciaService) {
     this.experienciaService = experienciaService;
   }
 
@@ -38,7 +38,7 @@ public class ExperienciaController {
   @GetMapping("/experiencia/{id}")
   public ResponseEntity<ExperienciaResponseDTO> getExperienciaById(@PathVariable final Long id) {
 
-    ExperienciaResponseDTO experienciaResponseDTO = experienciaService.getExperienciaById(id);
+    ExperienciaResponseDTO experienciaResponseDTO = this.experienciaService.getExperienciaById(id);
 
     return ResponseEntity.status(HttpStatus.OK)
         .body(experienciaResponseDTO);

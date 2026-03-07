@@ -3,14 +3,10 @@ package com.cybindev.cvproject.service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import com.cybindev.cvproject.domain.Experiencia;
-import com.cybindev.cvproject.domain.ExperienciaRequestDTO;
-import com.cybindev.cvproject.domain.ExperienciaResponseDTO;
+public interface ExperienciaService<O, I> {
+  O getExperienciaById(Long id);
 
-public interface ExperienciaService {
-  ExperienciaResponseDTO getExperienciaById(Long id);
+  O addExperiencia(I experienciaDTO);
 
-  Experiencia addExperiencia(ExperienciaRequestDTO experienciaDTO);
-
-  Page<ExperienciaResponseDTO> getExperienciaList(Pageable pageable);
+  Page<O> getExperienciaList(Pageable pageable);
 }

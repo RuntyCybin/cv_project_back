@@ -3,10 +3,32 @@ version: "3.9"
 services:
   experiencias:
     build:
-      context: ./experiencias
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: experiencias/Dockerfile
     ports:
       - "8080:8080"
     environment:
       - SPRING_PROFILES_ACTIVE=default
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://host.docker.internal:5432/cvdbnico
+      - SPRING_DATASOURCE_USERNAME=cvdbnicouser
+      - SPRING_DATASOURCE_PASSWORD=Gardian@2
     restart: unless-stopped
+
+  persona:
+    build:
+      context: .
+      dockerfile: persona/Dockerfile
+    ports:
+      - "8085:8085"
+    environment:
+      - SPRING_PROFILES_ACTIVE=default
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://host.docker.internal:5432/cvdbnico
+      - SPRING_DATASOURCE_USERNAME=cvdbnicouser
+      - SPRING_DATASOURCE_PASSWORD=Gardian@2
+    restart: unless-stopped
+
+  redis:
+    image: redis:7
+    container_name: redis-persona-local
+    ports:
+      - "6379:6379"

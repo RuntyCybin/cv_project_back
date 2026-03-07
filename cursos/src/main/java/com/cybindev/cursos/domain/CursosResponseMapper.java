@@ -1,21 +1,22 @@
 package com.cybindev.cursos.domain;
 
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.Mappings;
+import org.springframework.stereotype.Component;
 
-@Mapper
-public interface CursosResponseMapper {
+@Component
+public class CursosResponseMapper {
 
-  @Mappings({
-      // Map fields from entity to DTO
-      @Mapping(target = "id", source = "entity.id"),
-      @Mapping(target = "nombre", source = "entity.titulo"),
-      @Mapping(target = "portal", source = "entity.portal"),
-      @Mapping(target = "url", source = "entity.url"),
-      @Mapping(target = "autor", source = "entity.autor"),
-      @Mapping(target = "descripcion", source = "entity.descripcion"),
-      @Mapping(target = "periodo", source = "entity.periodo")
-  })
-  CursoResponseDTO toDto(Curso entity);
+  public CursoResponseDTO toDto(Curso entity) {
+    if (entity == null) {
+      return null;
+    }
+
+    return new CursoResponseDTO(
+        entity.getId(),
+        entity.getTitulo(),
+        entity.getPortal(),
+        entity.getUrl(),
+        entity.getAutor(),
+        entity.getDescripcion(),
+        entity.getPeriodo());
+  }
 }

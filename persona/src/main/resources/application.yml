@@ -14,13 +14,20 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         default_schema: cvdbnicoschema
+  cache:
+    type: redis
+  data:
+    redis:
+      host: redis
+      port: 6379
+
 server:
   port: 8085
   servlet:
     context-path: /cv
 
 app:
-  title: CV Project Application
+  title: Modulo de datos de la persona
 
 resilience4j:
   circuitbreaker:
@@ -33,3 +40,10 @@ resilience4j:
         waitDurationInOpenState: 10000
         permittedNumberOfCallsInHalfOpenState: 3
         slidingWindowType: COUNT_BASED
+
+logging:
+  level:
+    root: DEBUG
+    org.springframework.cache: TRACE
+    org.springframework.data.redis: DEBUG
+    io.github.resilience4j: DEBUG

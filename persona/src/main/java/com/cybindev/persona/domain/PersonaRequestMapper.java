@@ -4,35 +4,35 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.Mappings;
-import org.mapstruct.Named;
+import org.springframework.stereotype.Component;
 
-@Mapper(componentModel = "spring")
-public interface PersonaRequestMapper {
-  DateTimeFormatter DMY_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+@Component
+public class PersonaRequestMapper {
+  private static final DateTimeFormatter DMY_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
-  @Mappings({
-      @Mapping(target = "id", ignore = true),
-      @Mapping(target = "createdAt", ignore = true),
-      @Mapping(target = "updatedAt", ignore = true),
-      @Mapping(target = "fecha_nacimiento", source = "fecha_nacimiento", qualifiedByName = "toLocalDate"),
-      @Mapping(target = "telefono", source = "telefono"),
-      @Mapping(target = "email", source = "email"),
-      @Mapping(target = "calle", source = "calle"),
-      @Mapping(target = "via", source = "via"),
-      @Mapping(target = "numero_casa", source = "numero_casa"),
-      @Mapping(target = "codigo_postal", source = "codigo_postal"),
-      @Mapping(target = "ciudad", source = "ciudad"),
-      @Mapping(target = "provincia", source = "provincia"),
-      @Mapping(target = "pais", source = "pais"),
-      @Mapping(target = "nacionalidad", source = "nacionalidad")
-  })
-  Persona toPersona(PersonaRequestDTO personaRequestDTO);
+  public Persona toPersona(PersonaRequestDTO personaRequestDTO) {
+    if (personaRequestDTO == null) {
+      return null;
+    }
 
-  @Named("toLocalDate")
-  default LocalDate toLocalDate(String fecha_nacimiento) {
+    Persona persona = new Persona();
+    persona.setNombre(personaRequestDTO.nombre());
+    persona.setApellidos(personaRequestDTO.apellidos());
+    persona.setFecha_nacimiento(toLocalDate(personaRequestDTO.fecha_nacimiento()));
+    persona.setTelefono(personaRequestDTO.telefono());
+    persona.setEmail(personaRequestDTO.email());
+    persona.setCalle(personaRequestDTO.calle());
+    persona.setVia(personaRequestDTO.via());
+    persona.setNumero_casa(personaRequestDTO.numero_casa());
+    persona.setCodigo_postal(personaRequestDTO.codigo_postal());
+    persona.setCiudad(personaRequestDTO.ciudad());
+    persona.setProvincia(personaRequestDTO.provincia());
+    persona.setPais(personaRequestDTO.pais());
+    persona.setNacionalidad(personaRequestDTO.nacionalidad());
+    return persona;
+  }
+
+  public LocalDate toLocalDate(String fecha_nacimiento) {
     if (fecha_nacimiento == null || fecha_nacimiento.isBlank()) {
       return null;
     }

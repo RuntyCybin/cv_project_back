@@ -8,9 +8,7 @@ import com.cybindev.cursos.domain.Curso;
 import com.cybindev.cursos.domain.CursoRequestDTO;
 import com.cybindev.cursos.domain.CursoResponseDTO;
 import com.cybindev.cursos.domain.CursosRequestMapper;
-import com.cybindev.cursos.domain.CursosRequestMapperImpl;
 import com.cybindev.cursos.domain.CursosResponseMapper;
-import com.cybindev.cursos.domain.CursosResponseMapperImpl;
 import com.cybindev.cursos.repo.CursoRepo;
 import com.cybindev.cursos.service.CursoService;
 
@@ -21,10 +19,11 @@ public class CursoServiceImpl implements CursoService<CursoResponseDTO, CursoReq
   private final CursosRequestMapper requestMapper;
   private final CursosResponseMapper responseMapper;
 
-  public CursoServiceImpl(CursoRepo repo) {
+  public CursoServiceImpl(CursoRepo repo, CursosRequestMapper requestMapper,
+      CursosResponseMapper responseMapper) {
     this.repo = repo;
-    this.requestMapper = new CursosRequestMapperImpl();
-    this.responseMapper = new CursosResponseMapperImpl();
+    this.requestMapper = requestMapper;
+    this.responseMapper = responseMapper;
   }
 
   @Override
@@ -43,7 +42,7 @@ public class CursoServiceImpl implements CursoService<CursoResponseDTO, CursoReq
   public CursoResponseDTO obtenerCursoPorId(Long id) {
     System.out.println("Obteniendo curso con id: " + id);
     final Curso curso = this.repo.findById(id)
-            .orElseThrow(() -> new RuntimeException("Curso no encontrado con id: " + id));
+        .orElseThrow(() -> new RuntimeException("Curso no encontrado con id: " + id));
     return this.responseMapper.toDto(curso);
   }
 
@@ -55,8 +54,8 @@ public class CursoServiceImpl implements CursoService<CursoResponseDTO, CursoReq
       throw new RuntimeException("No se han recogido cursos");
     }
     return cursos.stream()
-            .map(this.responseMapper::toDto)
-            .toList();
+        .map(this.responseMapper::toDto)
+        .toList();
   }
 
 }
