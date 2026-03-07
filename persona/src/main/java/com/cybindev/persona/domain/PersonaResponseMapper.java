@@ -1,35 +1,29 @@
 package com.cybindev.persona.domain;
 
-import java.time.LocalDate;
+import org.springframework.stereotype.Component;
 
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.Mappings;
-import org.mapstruct.Named;
+@Component
+public class PersonaResponseMapper {
 
-@Mapper(componentModel = "spring")
-public interface PersonaResponseMapper {
+  public PersonaResponseDTO toDTO(Persona persona) {
+    if (persona == null) {
+      return null;
+    }
 
-  @Mappings({
-      @Mapping(target = "id", source = "id"),
-      @Mapping(target = "nombre", source = "nombre"),
-      @Mapping(target = "apellidos", source = "apellidos"),
-      @Mapping(target = "fecha_nacimiento", source = "fecha_nacimiento", qualifiedByName = "toLocalDate"),
-      @Mapping(target = "telefono", source = "telefono"),
-      @Mapping(target = "email", source = "email"),
-      @Mapping(target = "calle", source = "calle"),
-      @Mapping(target = "via", source = "via"),
-      @Mapping(target = "numero_casa", source = "numero_casa"),
-      @Mapping(target = "codigo_postal", source = "codigo_postal"),
-      @Mapping(target = "ciudad", source = "ciudad"),
-      @Mapping(target = "provincia", source = "provincia"),
-      @Mapping(target = "pais", source = "pais"),
-      @Mapping(target = "nacionalidad", source = "nacionalidad")
-  })
-  PersonaResponseDTO toDTO(Persona persona);
-
-  @Named("toLocalDate")
-  default LocalDate toLocalDate(String fecha_nacimiento) {
-    return LocalDate.parse(fecha_nacimiento);
+    return new PersonaResponseDTO(
+        persona.getId(),
+        persona.getNombre(),
+        persona.getApellidos(),
+        persona.getFecha_nacimiento(),
+        persona.getTelefono(),
+        persona.getEmail(),
+        persona.getCalle(),
+        persona.getVia(),
+        persona.getNumero_casa(),
+        persona.getCodigo_postal(),
+        persona.getCiudad(),
+        persona.getProvincia(),
+        persona.getPais(),
+        persona.getNacionalidad());
   }
 }

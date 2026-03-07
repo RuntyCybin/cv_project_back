@@ -1,21 +1,21 @@
 package com.cybindev.estudios.domain;
 
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.Mappings;
+import org.springframework.stereotype.Component;
 
-@Mapper
-public interface EstudioResponseMapper {
+@Component
+public class EstudioResponseMapper {
 
-  @Mappings({
-      // Map fields from entity to DTO
-      @Mapping(target = "id", source = "entity.id"),
-      @Mapping(target = "titulo", source = "entity.titulo"),
-      @Mapping(target = "institucion", source = "entity.institucion"),
-      @Mapping(target = "periodo", source = "entity.periodo"),
-      @Mapping(target = "descripcion", source = "entity.descripcion"),
-      @Mapping(target = "cursos", source = "entity.cursos")
-  })
-  EstudioResponseDTO toDto(Estudio entity);
+  public EstudioResponseDTO toDto(Estudio entity) {
+    if (entity == null) {
+      return null;
+    }
 
+    return new EstudioResponseDTO(
+        entity.getId(),
+        entity.getTitulo(),
+        entity.getInstitucion(),
+        entity.getPeriodo(),
+        entity.getDescripcion(),
+        entity.getCursos());
+  }
 }

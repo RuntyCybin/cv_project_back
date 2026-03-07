@@ -14,10 +14,12 @@ public class ProyectoServiceImpl implements ProyectoService<ProyectoResponseDTO,
   private final ProyectoRequestMapper requestMapper;
   private final ProyectResponseMapper responseMapper;
 
-  public ProyectoServiceImpl(ProyectoRepo r) {
+  public ProyectoServiceImpl(ProyectoRepo r,
+      ProyectoRequestMapper requestMapper,
+      ProyectResponseMapper responseMapper) {
     this.repo = r;
-    this.requestMapper = new ProyectoRequestMapperImpl();
-    this.responseMapper = new ProyectResponseMapperImpl();
+    this.requestMapper = requestMapper;
+    this.responseMapper = responseMapper;
   }
 
   @Override

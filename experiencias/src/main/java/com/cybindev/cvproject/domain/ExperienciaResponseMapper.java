@@ -1,23 +1,23 @@
 package com.cybindev.cvproject.domain;
 
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.Mappings;
-import org.mapstruct.Named;
+import org.springframework.stereotype.Component;
 
-@Mapper
-public interface ExperienciaResponseMapper {
-  @Mappings({
-      @Mapping(target = "puesto", source = "experiencia.puesto"),
-      @Mapping(target = "empresa", source = "experiencia.empresa"),
-      @Mapping(target = "descripcion", source = "experiencia.descripcion"),
-      @Mapping(target = "fechaInicio", source = "experiencia.periodo", qualifiedByName = "mapFechaInicio"),
-      @Mapping(target = "fechaFin", source = "experiencia.periodo", qualifiedByName = "mapFechaFinal")
-  })
-  ExperienciaResponseDTO toDto(Experiencia experiencia);
+@Component
+public class ExperienciaResponseMapper {
+  public ExperienciaResponseDTO toDto(Experiencia experiencia) {
+    if (experiencia == null) {
+      return null;
+    }
 
-  @Named("mapFechaInicio")
-  default String mapFechaInicio(String periodo) {
+    return new ExperienciaResponseDTO(
+        experiencia.getPuesto(),
+        experiencia.getEmpresa(),
+        experiencia.getDescripcion(),
+        mapFechaInicio(experiencia.getPeriodo()),
+        mapFechaFinal(experiencia.getPeriodo()));
+  }
+
+  private String mapFechaInicio(String periodo) {
     // lógica para extraer la fecha de inicio del periodo
     String[] partesPeriodo = periodo.split(" - ");
 
@@ -38,8 +38,7 @@ public interface ExperienciaResponseMapper {
     return new StringBuilder("01-1970").toString();
   }
 
-  @Named("mapFechaFinal")
-  default String mapFechaFinal(String periodo) {
+  private String mapFechaFinal(String periodo) {
     // lógica para extraer la fecha de inicio del periodo
     String[] partesPeriodo = periodo.split(" - ");
 

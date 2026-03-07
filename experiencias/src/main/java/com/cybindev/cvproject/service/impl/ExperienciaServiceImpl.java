@@ -2,7 +2,11 @@ package com.cybindev.cvproject.service.impl;
 
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -10,36 +14,36 @@ import org.springframework.stereotype.Service;
 import com.cybindev.cvproject.domain.Experiencia;
 import com.cybindev.cvproject.domain.ExperienciaRequestDTO;
 import com.cybindev.cvproject.domain.ExperienciaRequestMapper;
-import com.cybindev.cvproject.domain.ExperienciaRequestMapperImpl;
 import com.cybindev.cvproject.domain.ExperienciaResponseDTO;
 import com.cybindev.cvproject.domain.ExperienciaResponseMapper;
-import com.cybindev.cvproject.domain.ExperienciaResponseMapperImpl;
 import com.cybindev.cvproject.repository.ExperienciaRepo;
 import com.cybindev.cvproject.service.ExperienciaService;
 
 @Service
-public class ExperienciaServiceImpl implements ExperienciaService {
+public class ExperienciaServiceImpl implements ExperienciaService<ExperienciaResponseDTO, ExperienciaRequestDTO> {
 
   @Value("${app.title}")
   private String title;
 
+  private static final Logger logger = LoggerFactory.getLogger(ExperienciaServiceImpl.class);
   private final ExperienciaRepo experienciaRepo;
   private final ExperienciaRequestMapper experienciaRequestMapper;
   private final ExperienciaResponseMapper experienciaResponseMapper;
 
-  public ExperienciaServiceImpl(
-      ExperienciaRepo experienciaRepo) {
+  public ExperienciaServiceImpl(ExperienciaRepo experienciaRepo,
+      ExperienciaResponseMapper experienciaResponseMapper, ExperienciaRequestMapper experienciaRequestMapper) {
     this.experienciaRepo = experienciaRepo;
-    this.experienciaRequestMapper = new ExperienciaRequestMapperImpl();
-    this.experienciaResponseMapper = new ExperienciaResponseMapperImpl();
+    this.experienciaRequestMapper = experienciaRequestMapper;
+    this.experienciaResponseMapper = experienciaResponseMapper;
   }
 
   @Override
+  @Cacheable(value = "experienciaCache", key = "#id")
   public ExperienciaResponseDTO getExperienciaById(Long id) {
-    System.out.println("Proyecto " + title + ": Getting experiencia by id: " + id);
+    logger.info("Proyecto " + title + ": Getting experiencia by id: " + id);
 
     Optional<Experiencia> experiencia = experienciaRepo.findById(id);
-    System.out.println("Fetching experiencia con id: " + experiencia.get().getId());
+    logger.info("Fetching experiencia con id: " + experiencia.get().getId());
 
     Experiencia foundExp = Optional.ofNullable(experiencia)
         .map(exp -> experiencia.get())
@@ -47,20 +51,21 @@ public class ExperienciaServiceImpl implements ExperienciaService {
 
     ExperienciaResponseDTO experienciaDTO = experienciaResponseMapper.toDto(foundExp);
 
-    System.out.println("Returning mock de experiencia DTO: " + experienciaDTO);
+    logger.info("Returning mock de experiencia DTO: " + experienciaDTO);
     return experienciaDTO;
   }
 
   @Override
-  public Experiencia addExperiencia(ExperienciaRequestDTO experienciaDTO) {
+  @CachePut(value = "experienciaCache", key = "#result.id")
+  public ExperienciaResponseDTO addExperiencia(ExperienciaRequestDTO experienciaDTO) {
 
     Experiencia experiencia = experienciaRequestMapper.toEntity(experienciaDTO);
 
     Experiencia experienciaResultSave = experienciaRepo.save(experiencia);
-    System.out.println("Saved experiencia: " + experienciaResultSave);
+    ExperienciaResponseDTO experienciaResponseDTO = experienciaResponseMapper.toDto(experienciaResultSave);
+    logger.info("Saved experiencia: " + experienciaResultSave);
 
-    return Optional
-        .of(experienciaResultSave)
+    return Optional.of(experienciaResponseDTO)
         .orElseThrow(() -> new RuntimeException("Error saving experiencia"));
   }
 
