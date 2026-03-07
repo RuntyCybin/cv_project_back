@@ -22,4 +22,4 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Build with Docker Compose
-      run: docker-compose up --build
+      run: docker compose up --build
