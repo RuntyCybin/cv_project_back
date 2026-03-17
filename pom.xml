@@ -22,6 +22,7 @@
 		<module>cursos</module>
 		<module>projects</module>
 		<module>persona</module>
+		<module>autenticacion</module>
 	</modules>
 
 	<properties>

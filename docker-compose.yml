@@ -19,7 +19,7 @@ services:
       context: .
       dockerfile: persona/Dockerfile
     ports:
-      - "8085:8085"
+      - "8082:8082"
     environment:
       - SPRING_PROFILES_ACTIVE=default
       - SPRING_DATASOURCE_URL=jdbc:postgresql://host.docker.internal:5432/cvdbnico
