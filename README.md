@@ -55,7 +55,8 @@ Guia de puertos del proyecto
   8080 : API experiencias
   8081 : Front
   8082 : API datos de persona
-  8083 : 
+  8083 : API autenticacion
+  8084 : 
 ```
 
 

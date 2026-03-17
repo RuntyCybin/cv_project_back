@@ -27,6 +27,19 @@ services:
       - SPRING_DATASOURCE_PASSWORD=Gardian@2
     restart: unless-stopped
 
+  auth:
+    build:
+      context: .
+      dockerfile: autenticacion/Dockerfile
+    ports:
+      - "8083:8083"
+    environment:
+      - SPRING_PROFILES_ACTIVE=default
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://host.docker.internal:5432/cvdbnico
+      - SPRING_DATASOURCE_USERNAME=cvdbnicouser
+      - SPRING_DATASOURCE_PASSWORD=Gardian@2
+    restart: unless-stopped
+
   redis:
     image: redis:7
     container_name: redis-persona-local
