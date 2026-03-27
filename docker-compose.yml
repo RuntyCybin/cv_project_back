@@ -1,6 +1,12 @@
 version: "3.9"
 
 services:
+  redis:
+    image: redis:7
+    container_name: redis-persona-local
+    ports:
+      - "6379:6379"
+
   experiencias:
     build:
       context: .
@@ -12,6 +18,8 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://host.docker.internal:5432/cvdbnico
       - SPRING_DATASOURCE_USERNAME=cvdbnicouser
       - SPRING_DATASOURCE_PASSWORD=Gardian@2
+    depends_on:
+      - redis
     restart: unless-stopped
 
   persona:
@@ -25,6 +33,8 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://host.docker.internal:5432/cvdbnico
       - SPRING_DATASOURCE_USERNAME=cvdbnicouser
       - SPRING_DATASOURCE_PASSWORD=Gardian@2
+    depends_on:
+      - redis
     restart: unless-stopped
 
   auth:
@@ -39,9 +49,3 @@ services:
       - SPRING_DATASOURCE_USERNAME=cvdbnicouser
       - SPRING_DATASOURCE_PASSWORD=Gardian@2
     restart: unless-stopped
-
-  redis:
-    image: redis:7
-    container_name: redis-persona-local
-    ports:
-      - "6379:6379"

@@ -11,7 +11,7 @@
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
-	<groupId>com.cybindev.cvproject-parent</groupId>
+	<groupId>com.cybindev</groupId>
 	<artifactId>persona</artifactId>
 	<name>persona</name>
 	<description>Modulo para gestionar los datos de la persona</description>

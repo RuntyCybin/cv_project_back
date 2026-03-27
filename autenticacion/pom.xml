@@ -11,7 +11,7 @@
     <relativePath>../pom.xml</relativePath>
   </parent>
 
-  <groupId>com.cybindev.cvproject-parent</groupId>
+  <groupId>com.cybindev</groupId>
   <artifactId>autenticacion</artifactId>
   <name>autenticacion</name>
   <description>Modulo para gestionar la autenticación de usuarios</description>

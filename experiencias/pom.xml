@@ -11,7 +11,7 @@
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
-	<groupId>com.cybindev.cvproject-parent</groupId>
+	<groupId>com.cybindev</groupId>
 	<artifactId>experiencias</artifactId>
 	<name>experiencias</name>
 	<description>Modulo para gestiornar los las experiencias laborales</description>
