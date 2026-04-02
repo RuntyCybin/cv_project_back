@@ -10,12 +10,8 @@ import com.cybindev.autenticacion.domain.AutenticacionRequestDTO;
 import com.cybindev.autenticacion.domain.AutenticacionRequestMapper;
 import com.cybindev.autenticacion.domain.AutenticacionResponseDTO;
 import com.cybindev.autenticacion.domain.AutenticacionResponseMapper;
-import com.cybindev.autenticacion.domain.PersonaAutenticacionRequestDTO;
-import com.cybindev.autenticacion.domain.PersonaAutenticacionResponseDTO;
-import com.cybindev.autenticacion.domain.PersonaAutenticacionResponseMapper;
 import com.cybindev.autenticacion.repo.AutenticacionRepo;
 import com.cybindev.autenticacion.service.AutenticacionService;
-import com.cybindev.autenticacion.service.PersonaAutenticacionService;
 
 @Service
 public class AutenticacionServiceImpl
@@ -28,16 +24,13 @@ public class AutenticacionServiceImpl
   private final AutenticacionRepo autenticacionRepo;
   private final AutenticacionRequestMapper autenticacionRequestMapper;
   private final AutenticacionResponseMapper autenticacionResponseMapper;
-  private final PersonaAutenticacionService<PersonaAutenticacionResponseDTO, PersonaAutenticacionRequestDTO> personaAutenticacionService;
 
   public AutenticacionServiceImpl(AutenticacionRepo autenticacionRepo,
       AutenticacionRequestMapper autenticacionRequestMapper,
-      AutenticacionResponseMapper autenticacionResponseMapper,
-      PersonaAutenticacionService<PersonaAutenticacionResponseDTO, PersonaAutenticacionRequestDTO> personaAutenticacionService) {
+      AutenticacionResponseMapper autenticacionResponseMapper) {
     this.autenticacionRepo = autenticacionRepo;
     this.autenticacionRequestMapper = autenticacionRequestMapper;
     this.autenticacionResponseMapper = autenticacionResponseMapper;
-    this.personaAutenticacionService = personaAutenticacionService;
   }
 
   /*
