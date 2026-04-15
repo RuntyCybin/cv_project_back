@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cybindev.autenticacion.domain.AutenticacionResponseDTO;
 import com.cybindev.autenticacion.domain.PersonaAutenticacionRequestDTO;
 import com.cybindev.autenticacion.domain.PersonaAutenticacionResponseDTO;
 import com.cybindev.autenticacion.service.PersonaAutenticacionService;
@@ -78,11 +79,29 @@ public class PersonaAutenticacionController {
    * ------------------------------------------
    */
 
+  /*
+   * ------------------------------------------
+   * GET PERSONA - AUTENTICACION POR ID AUTENTICACION
+   * ------------------------------------------
+   */
   @GetMapping("/{idautenticacion}")
+  @CircuitBreaker(name = "getPersonaAutenticacionPorIdAutenticacion", fallbackMethod = "getPersonaAutPorIdAutFallback")
   public ResponseEntity<PersonaAutenticacionResponseDTO> obtenerPersonaAuthPorIdAuth(
       @PathVariable Long idautenticacion) {
     return ResponseEntity
         .status(HttpStatus.OK)
         .body(this.personaAutenticacionService.obtenerPersonaAutenticacionPorAutenticacionId(idautenticacion));
   }
+
+  public ResponseEntity<PersonaAutenticacionResponseDTO> getPersonaAutPorIdAutFallback(
+      @RequestBody PersonaAutenticacionRequestDTO requestDTO, Throwable throwable) {
+    return ResponseEntity
+        .status(HttpStatus.INTERNAL_SERVER_ERROR)
+        .body(new PersonaAutenticacionResponseDTO(-1L, -1L, -1L));
+  }
+  /*
+   * ------------------------------------------
+   * !GET PERSONA - AUTENTICACION POR ID AUTENTICACION
+   * ------------------------------------------
+   */
 }

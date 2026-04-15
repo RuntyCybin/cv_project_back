@@ -8,6 +8,15 @@ public class AutenticacionResponseMapper {
     return new AutenticacionResponseDTO(
         autenticacion.getId(),
         autenticacion.getLogin(),
-        autenticacion.getPassword());
+        autenticacion.getPassword(),
+        null);
+  }
+
+  public AutenticacionResponseDTO toResponseConJwt(Autenticacion autenticacion, String jwt) {
+    return new AutenticacionResponseDTO(
+        autenticacion.getId(),
+        autenticacion.getLogin(),
+        null,
+        jwt);
   }
 }

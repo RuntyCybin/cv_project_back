@@ -23,6 +23,7 @@
 		<module>projects</module>
 		<module>persona</module>
 		<module>autenticacion</module>
+		<module>api-gateway</module>
 	</modules>
 
 	<properties>

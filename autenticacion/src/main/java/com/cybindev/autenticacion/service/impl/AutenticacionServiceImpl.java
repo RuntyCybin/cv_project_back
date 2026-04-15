@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.cybindev.autenticacion.domain.Autenticacion;
 import com.cybindev.autenticacion.domain.AutenticacionRequestDTO;
@@ -12,25 +13,29 @@ import com.cybindev.autenticacion.domain.AutenticacionResponseDTO;
 import com.cybindev.autenticacion.domain.AutenticacionResponseMapper;
 import com.cybindev.autenticacion.repo.AutenticacionRepo;
 import com.cybindev.autenticacion.service.AutenticacionService;
+import com.cybindev.autenticacion.service.JwtService;
 
 @Service
 public class AutenticacionServiceImpl
     implements AutenticacionService<AutenticacionResponseDTO, AutenticacionRequestDTO> {
 
   @Value("${app.title}")
-  private String title;
+  private String titleModulo;
 
   private static final Logger logger = LoggerFactory.getLogger(AutenticacionServiceImpl.class);
   private final AutenticacionRepo autenticacionRepo;
   private final AutenticacionRequestMapper autenticacionRequestMapper;
   private final AutenticacionResponseMapper autenticacionResponseMapper;
+  private final JwtService jwtService;
 
   public AutenticacionServiceImpl(AutenticacionRepo autenticacionRepo,
       AutenticacionRequestMapper autenticacionRequestMapper,
-      AutenticacionResponseMapper autenticacionResponseMapper) {
+      AutenticacionResponseMapper autenticacionResponseMapper,
+      JwtService jwtServ) {
     this.autenticacionRepo = autenticacionRepo;
     this.autenticacionRequestMapper = autenticacionRequestMapper;
     this.autenticacionResponseMapper = autenticacionResponseMapper;
+    this.jwtService = jwtServ;
   }
 
   /*
@@ -43,6 +48,12 @@ public class AutenticacionServiceImpl
     if (autenticacionRequest != null) {
       Autenticacion autenticacion = autenticacionRequestMapper.toAutenticacion(autenticacionRequest);
       if (autenticacion != null) {
+        // comprobar si ya existe este login
+        boolean loginExiste = autenticacionRepo.findByLogin(autenticacionRequest.login()).isPresent();
+        if (loginExiste) {
+          logger.warn("{} - La Autenticacion con este login ya existe", titleModulo);
+          throw new RuntimeException(titleModulo + " - Error al crear autenticación: login ya existe");
+        }
         Autenticacion autenticacionGuardada = autenticacionRepo.save(autenticacion);
         return autenticacionResponseMapper.toResponse(autenticacionGuardada);
       } else {
@@ -101,14 +112,16 @@ public class AutenticacionServiceImpl
    * son incorrectos.
    */
   @Override
+  @Transactional(readOnly = true)
   public AutenticacionResponseDTO obtenerAutenticacionPorLoginYPassword(
       AutenticacionRequestDTO autenticacionRequest) {
+    logger.info(":::::::::::::::::::::::::::::::::::::::::LLEGO - 0");
     logger.info("Realizando el login con login y password");
 
     if (autenticacionRequest != null) {
       boolean isEmptyLogin = autenticacionRequest.login() == null || autenticacionRequest.login().isEmpty();
       boolean isEmptyPassword = autenticacionRequest.password() == null || autenticacionRequest.password().isEmpty();
-      if (isEmptyPassword && isEmptyLogin) {
+      if (isEmptyPassword || isEmptyLogin) {
         throw new RuntimeException("Login y password son requeridos");
       }
 
@@ -121,7 +134,17 @@ public class AutenticacionServiceImpl
 
       if (autenticacionEncontrada != null) {
         logger.info("Login exitoso para el usuario: {}", autenticacionEncontrada.getLogin());
-        return autenticacionResponseMapper.toResponse(autenticacionEncontrada);
+
+        // generamos el token
+        String jwt = jwtService.generarToken(autenticacionEncontrada.getLogin(), autenticacionEncontrada.getId());
+        boolean isEmptyJwt = jwt == null || jwt.isEmpty();
+
+        if (!isEmptyJwt) {
+          return autenticacionResponseMapper.toResponseConJwt(autenticacionEncontrada, jwt);
+        } else {
+          logger.warn("Error al generar el Token JWT");
+          throw new RuntimeException("Error al generar el Token JWT");
+        }
       } else {
         logger.warn("Login o password incorrectos para el usuario: {}", autenticacionRequest.login());
         throw new RuntimeException("Login o password incorrectos");

@@ -8,6 +8,8 @@ spring:
     driver-class-name: org.postgresql.Driver
     schema: cvdbnicoschema
   jpa:
+    show-sqql: true
+    open-in-view: false # buena práctica para APIs REST
     hibernate:
       ddl-auto: update
     properties:
@@ -28,6 +30,9 @@ server:
 
 app:
   title: Modulo de autenticacion
+  jwt:
+    secret: ${JWT_SECRET:clave-secreta-de-desarrollo-cambiar-en-produccion-256bits}
+    expiration: 3600
 
 resilience4j:
   circuitbreaker:
@@ -44,6 +49,8 @@ resilience4j:
 logging:
   level:
     root: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.orm.jdbc.bind: TRACE
     org.springframework.cache: TRACE
     org.springframework.data.redis: DEBUG
     io.github.resilience4j: DEBUG

@@ -67,7 +67,7 @@ public class AutenticacionController {
       @RequestBody AutenticacionRequestDTO requestDTO, Throwable throwable) {
     return ResponseEntity
         .status(HttpStatus.INTERNAL_SERVER_ERROR)
-        .body(new AutenticacionResponseDTO(-1L, "Fallback Login", "Fallback Password"));
+        .body(new AutenticacionResponseDTO(-1L, throwable.getMessage(), "Fallback Password", null));
   }
   /*
    * ------------------------------------------
@@ -93,7 +93,7 @@ public class AutenticacionController {
       Throwable throwable) {
     return ResponseEntity
         .status(HttpStatus.INTERNAL_SERVER_ERROR)
-        .body(new AutenticacionResponseDTO(-1L, "Fallback Login", "Fallback Password"));
+        .body(new AutenticacionResponseDTO(-1L, "Fallback Login", "Fallback Password", null));
   }
   /*
    * ------------------------------------------
@@ -119,7 +119,7 @@ public class AutenticacionController {
       Throwable throwable) {
     return ResponseEntity
         .status(HttpStatus.INTERNAL_SERVER_ERROR)
-        .body(new AutenticacionResponseDTO(-1L, "Fallback Login", "Fallback Password"));
+        .body(new AutenticacionResponseDTO(-1L, "Fallback Login", "Fallback Password", null));
   }
   /*
    * ------------------------------------------
@@ -129,7 +129,7 @@ public class AutenticacionController {
 
   /*
    * ------------------------------------------
-   * POST AUTENTICACION LOGIN
+   * POST AUTENTICACION POR LOGIN Y PASSWORD
    * ------------------------------------------
    */
   @PostMapping("/login")
@@ -146,11 +146,15 @@ public class AutenticacionController {
       @RequestBody AutenticacionRequestDTO requestDTO, Throwable throwable) {
     return ResponseEntity
         .status(HttpStatus.INTERNAL_SERVER_ERROR)
-        .body(new AutenticacionResponseDTO(-1L, "Fallback Login", "Fallback Password"));
+        .body(new AutenticacionResponseDTO(
+            -1L,
+            throwable.getClass().getSimpleName(),
+            throwable.getCause().getMessage(),
+            null));
   }
   /*
    * ------------------------------------------
-   * !POST AUTENTICACION LOGIN
+   * !POST AUTENTICACION POR LOGIN Y PASSWORD
    * ------------------------------------------
    */
 }
