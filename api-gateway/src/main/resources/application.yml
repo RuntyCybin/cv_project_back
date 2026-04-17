@@ -1,0 +1,42 @@
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      routes:
+        - id: autenticacion
+          uri: http://auth:8083
+          predicates:
+            - Path=/cv/autenticacion/**
+
+        - id: persona
+          uri: http://persona:8082
+          predicates:
+            - Path=/cv/persona/**
+
+        - id: experiencias
+          uri: http://experiencias:8084
+          predicates:
+            - Path=/cv/experiencias/**
+
+        - id: estudios
+          uri: http://localhost:8085
+          predicates:
+            - Path=/cv/estudios/**
+
+        - id: cursos
+          uri: http://localhost:8086
+          predicates:
+            - Path=/cv/cursos/**
+
+        - id: projects
+          uri: http://localhost:8087
+          predicates:
+            - Path=/cv/projects/**
+
+server:
+  port: 8080
+
+app:
+  jwt:
+    secret: ${JWT_SECRET:clave-secreta-de-desarrollo-cambiar-en-produccion-256bits}

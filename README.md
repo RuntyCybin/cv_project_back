@@ -47,6 +47,18 @@ Arrancar proyect con Docker
   cd my-project
 ```
 
+## Puertos
+
+Guia de puertos del proyecto
+
+```bash
+  8080 : API-Gateway
+  8081 : Front
+  8082 : API datos de persona
+  8083 : API autenticacion
+  8084 : API experiencias
+  8085 : 
+```
 
 
 

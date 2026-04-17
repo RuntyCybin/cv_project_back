@@ -9,4 +9,6 @@ public interface ExperienciaService<O, I> {
   O addExperiencia(I experienciaDTO);
 
   Page<O> getExperienciaList(Pageable pageable);
+
+  void eliminarExperiencia(I experiencia);
 }

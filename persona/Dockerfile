@@ -12,5 +12,5 @@ WORKDIR /app
 
 COPY --from=builder /workspace/persona/target/persona-*.jar app.jar
 
-EXPOSE 8085
+EXPOSE 8082
 ENTRYPOINT ["java", "-jar", "/app/app.jar"]
