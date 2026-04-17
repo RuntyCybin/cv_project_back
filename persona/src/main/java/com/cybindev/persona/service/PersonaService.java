@@ -9,4 +9,6 @@ public interface PersonaService<O, I> {
 
   List<O> listarPersona();
 
+  void eliminarPersona(I persona);
+
 }

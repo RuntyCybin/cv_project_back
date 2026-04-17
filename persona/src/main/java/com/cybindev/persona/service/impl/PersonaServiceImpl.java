@@ -5,6 +5,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -72,6 +73,25 @@ public class PersonaServiceImpl implements PersonaService<PersonaResponseDTO, Pe
     return personas.stream()
         .map(this.personaResponseMapper::toDTO)
         .toList();
+  }
+
+  @Override
+  @CacheEvict(value = "personaCache", allEntries = true)
+  public void eliminarPersona(PersonaRequestDTO dtoPersona) {
+    logger.info("Servicio para eliminar datos de la persona y borrarlos de la cache");
+
+    if (null != dtoPersona) {
+      Persona persona = personaRequestMapper.toPersona(dtoPersona);
+      if (null != persona) {
+        this.personaRepo.delete(persona);
+      } else {
+        logger.error("ERROR: mapper fallo al convertir DTO a Entity");
+        throw new RuntimeException("ERROR: mapper fallo al convertir DTO a Entity");
+      }
+    } else {
+      logger.error("DTO de persona es nulo");
+      throw new RuntimeException("DTO de persona es nulo");
+    }
   }
 
 }
