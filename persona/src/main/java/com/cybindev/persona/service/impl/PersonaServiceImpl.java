@@ -61,9 +61,14 @@ public class PersonaServiceImpl implements PersonaService<PersonaResponseDTO, Pe
   @Cacheable(value = "personaCache", key = "#id")
   public PersonaResponseDTO obtenerPersonaPorId(Long id) {
     logger.info("Servicio obtener persona por id: " + id);
-    Persona persona = this.personaRepo.findById(id)
-        .orElseThrow(() -> new RuntimeException("Persona no encontrada con id: " + id));
-    return this.personaResponseMapper.toDTO(persona);
+    if (id > 0L) {
+      Persona persona = this.personaRepo.findById(id)
+          .orElseThrow(() -> new RuntimeException("Persona no encontrada con id: " + id));
+      return this.personaResponseMapper.toDTO(persona);
+    } else {
+      logger.error("ERROR: id debe de ser un numero entero");
+      throw new RuntimeException("ERROR: id debe de ser un numero entero");
+    }
   }
 
   @Override
