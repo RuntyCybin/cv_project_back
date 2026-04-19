@@ -1,5 +1,7 @@
 package com.cybindev.autenticacion.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -8,7 +10,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cybindev.autenticacion.domain.AutenticacionResponseDTO;
 import com.cybindev.autenticacion.domain.PersonaAutenticacionRequestDTO;
 import com.cybindev.autenticacion.domain.PersonaAutenticacionResponseDTO;
 import com.cybindev.autenticacion.service.PersonaAutenticacionService;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/persona-autenticacion")
 public class PersonaAutenticacionController {
 
+  private final Logger logger = LoggerFactory.getLogger(PersonaAutenticacionController.class);
   private final PersonaAutenticacionService<PersonaAutenticacionResponseDTO, PersonaAutenticacionRequestDTO> personaAutenticacionService;
 
   public PersonaAutenticacionController(
@@ -45,11 +47,6 @@ public class PersonaAutenticacionController {
         .status(HttpStatus.OK)
         .body("Persona - Autenticacion controller is healthy");
   }
-  /*
-   * ------------------------------------------
-   * !HEALTH CHECK
-   * ------------------------------------------
-   */
 
   /*
    * ------------------------------------------
@@ -73,11 +70,6 @@ public class PersonaAutenticacionController {
         .status(HttpStatus.INTERNAL_SERVER_ERROR)
         .body(new PersonaAutenticacionResponseDTO(-1L, -1L, -1L));
   }
-  /*
-   * ------------------------------------------
-   * !POST PERSONA - AUTENTICACION
-   * ------------------------------------------
-   */
 
   /*
    * ------------------------------------------
@@ -90,18 +82,16 @@ public class PersonaAutenticacionController {
       @PathVariable Long idautenticacion) {
     return ResponseEntity
         .status(HttpStatus.OK)
-        .body(this.personaAutenticacionService.obtenerPersonaAutenticacionPorAutenticacionId(idautenticacion));
+        .body(this.personaAutenticacionService
+            .obtenerPersonaAutenticacionPorAutenticacionId(idautenticacion));
   }
 
   public ResponseEntity<PersonaAutenticacionResponseDTO> getPersonaAutPorIdAutFallback(
-      @RequestBody PersonaAutenticacionRequestDTO requestDTO, Throwable throwable) {
+      @PathVariable Long idautenticacion, Throwable throwable) {
+    logger.error("FALLBACK: Simple name: " + throwable.getClass().getName()
+        + " msg: " + throwable.getCause().getMessage());
     return ResponseEntity
         .status(HttpStatus.INTERNAL_SERVER_ERROR)
         .body(new PersonaAutenticacionResponseDTO(-1L, -1L, -1L));
   }
-  /*
-   * ------------------------------------------
-   * !GET PERSONA - AUTENTICACION POR ID AUTENTICACION
-   * ------------------------------------------
-   */
 }
