@@ -8,6 +8,11 @@ spring:
           uri: http://auth:8083
           predicates:
             - Path=/cv/autenticacion/**
+        
+        - id: persona-autenticacion
+          uri: http://auth:8083
+          predicates:
+            - Path=/cv/persona-autenticacion/**
 
         - id: persona
           uri: http://persona:8082
