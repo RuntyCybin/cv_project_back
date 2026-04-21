@@ -41,11 +41,6 @@ public class CursosController {
     return ResponseEntity.status(HttpStatus.OK)
         .body("Cursos controller is healthy");
   }
-  /*
-   * ------------------------------------------
-   * !HEALTH CHECK
-   * ------------------------------------------
-   */
 
   /*
    * ------------------------------------------
@@ -63,18 +58,13 @@ public class CursosController {
     return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
         .body(List.of(new CursoResponseDTO(
             -1L,
-            "Fallback GetAll Curso",
-            "N/A",
-            "N/A",
+            throwable.getMessage() != null ? throwable.getMessage() : "Fallback GetAll Curso",
+            throwable.getClass().getSimpleName(),
+            throwable.getCause() != null ? throwable.getCause().toString() : "N/A",
             "N/A",
             "No se han podido obtener los cursos",
             "N/A")));
   }
-  /*
-   * ------------------------------------------
-   * !GET ALL CURSOS
-   * ------------------------------------------
-   */
 
   /*
    * ------------------------------------------
@@ -92,9 +82,9 @@ public class CursosController {
   public ResponseEntity<CursoResponseDTO> fallbackPostCurso(@RequestBody CursoRequestDTO request, Throwable throwable) {
     CursoResponseDTO fallbackResponse = new CursoResponseDTO(
         -1L,
-        "Fallback Post Curso",
-        "N/A",
-        "N/A",
+        throwable.getMessage() != null ? throwable.getMessage() : "Fallback Post Curso",
+        throwable.getClass().getSimpleName(),
+        throwable.getCause() != null ? throwable.getCause().toString() : "N/A",
         "N/A",
         "No se ha podido crear el curso",
         "N/A");
@@ -102,11 +92,6 @@ public class CursosController {
     return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
         .body(fallbackResponse);
   }
-  /*
-   * ------------------------------------------
-   * !POST CURSO
-   * ------------------------------------------
-   */
 
   /*
    * ------------------------------------------
@@ -124,9 +109,9 @@ public class CursosController {
   public ResponseEntity<CursoResponseDTO> fallbackGetById(@PathVariable Long id, Throwable throwable) {
     CursoResponseDTO fallbackResponse = new CursoResponseDTO(
         -1L,
-        "Fallback GetById Curso",
-        "N/A",
-        "N/A",
+        throwable.getMessage() != null ? throwable.getMessage() : "Fallback GetCursoById Curso",
+        throwable.getClass().getSimpleName(),
+        throwable.getCause() != null ? throwable.getCause().toString() : "N/A",
         "N/A",
         "No se ha podido obtener el curso con id: " + id,
         "N/A");
@@ -134,10 +119,4 @@ public class CursosController {
     return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
         .body(fallbackResponse);
   }
-  /*
-   * ------------------------------------------
-   * !GET CURSO BY ID
-   * ------------------------------------------
-   */
-
 }

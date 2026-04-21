@@ -41,11 +41,6 @@ public class EstudiosController {
     return ResponseEntity.status(HttpStatus.OK)
         .body("Estudios controller is healthy");
   }
-  /*
-   * ------------------------------------------
-   * !HEALTH CHECK
-   * ------------------------------------------
-   */
 
   /*
    * ------------------------------------------
@@ -62,20 +57,15 @@ public class EstudiosController {
   public ResponseEntity<List<EstudioResponseDTO>> fallbackGetAll(Throwable throwable) {
     EstudioResponseDTO fallbackResponse = new EstudioResponseDTO(
         -1L,
-        "No Title",
-        "No Institution",
-        "No Period",
+        throwable.getMessage() != null ? throwable.getMessage() : "Fallback GetAll",
+        throwable.getClass().getSimpleName(),
+        throwable.getCause() != null ? throwable.getCause().toString() : "N/A",
         "Fallback response due to service unavailability",
         "No Courses");
 
     return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
         .body(List.of(fallbackResponse));
   }
-  /*
-   * ------------------------------------------
-   * !GET ALL ESTUDIOS
-   * ------------------------------------------
-   */
 
   /*
    * ------------------------------------------
@@ -93,20 +83,15 @@ public class EstudiosController {
       Throwable throwable) {
     EstudioResponseDTO fallbackResponse = new EstudioResponseDTO(
         -1L,
-        "No Title",
-        "No Institution",
-        "No Period",
+        throwable.getMessage() != null ? throwable.getMessage() : "Fallback PostEstudio",
+        throwable.getClass().getSimpleName(),
+        throwable.getCause() != null ? throwable.getCause().toString() : "N/A",
         "Fallback response due to service unavailability",
         "No Courses");
 
     return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
         .body(fallbackResponse);
   }
-  /*
-   * ------------------------------------------
-   * !POST ESTUDIO
-   * ------------------------------------------
-   */
 
   /*
    * ------------------------------------------
@@ -124,19 +109,13 @@ public class EstudiosController {
   public ResponseEntity<EstudioResponseDTO> fallbackGetById(@PathVariable Long id, Throwable throwable) {
     EstudioResponseDTO fallbackResponse = new EstudioResponseDTO(
         -1L,
-        "No Title",
-        "No Institution",
-        "No Period",
+        throwable.getMessage() != null ? throwable.getMessage() : "Fallback GetEstudioById",
+        throwable.getClass().getSimpleName(),
+        throwable.getCause() != null ? throwable.getCause().toString() : "N/A",
         "Fallback response due to service unavailability",
         "No Courses");
 
     return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
         .body(fallbackResponse);
   }
-  /*
-   * ------------------------------------------
-   * !GET ESTUDIO
-   * ------------------------------------------
-   */
-
 }

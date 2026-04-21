@@ -35,11 +35,6 @@ public class ProjectController {
     return ResponseEntity.status(HttpStatus.OK)
         .body("Proyectos controller is healthy");
   }
-  /*
-   * ------------------------------------------
-   * !HEALTH CHECK
-   * ------------------------------------------
-   */
 
   /*
    * ------------------------------------------
@@ -57,16 +52,11 @@ public class ProjectController {
     return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
         .body(List.of(new ProyectoResponseDTO(
             -1L,
-            "Fallback GetAll Proyectos",
-            "N/A",
-            "No se han podido obtener los proyectos",
+            throwable.getMessage() != null ? throwable.getMessage() : "Fallback GetAll Proyectos",
+            throwable.getClass().getSimpleName(),
+            throwable.getCause() != null ? throwable.getCause().toString() : "N/A",
             "N/A")));
   }
-  /*
-   * ------------------------------------------
-   * !GET ALL PROYECTOS
-   * ------------------------------------------
-   */
 
   /*
    * ------------------------------------------
@@ -86,16 +76,11 @@ public class ProjectController {
     return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
         .body(new ProyectoResponseDTO(
             -1L,
-            "Fallback Create Proyecto",
-            "N/A",
-            "No se han podido crear el proyecto",
+            throwable.getMessage() != null ? throwable.getMessage() : "Fallback Create Proyecto",
+            throwable.getClass().getSimpleName(),
+            throwable.getCause() != null ? throwable.getCause().toString() : "N/A",
             "N/A"));
   }
-  /*
-   * ------------------------------------------
-   * !POST PROYECTOS
-   * ------------------------------------------
-   */
 
   /*
    * ------------------------------------------
@@ -115,14 +100,9 @@ public class ProjectController {
     return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
         .body(new ProyectoResponseDTO(
             -1L,
-            "Fallback Get Proyecto",
-            "N/A",
-            "No se ha podido obtener el proyecto por su id",
+            throwable.getMessage() != null ? throwable.getMessage() : "Fallback Get Proyecto",
+            throwable.getClass().getSimpleName(),
+            throwable.getCause() != null ? throwable.getCause().toString() : "N/A",
             "N/A"));
   }
-  /*
-   * ------------------------------------------
-   * !GET PROYECTO POR ID
-   * ------------------------------------------
-   */
 }

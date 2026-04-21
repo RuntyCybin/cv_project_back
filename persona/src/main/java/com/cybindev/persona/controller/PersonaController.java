@@ -65,10 +65,10 @@ public class PersonaController {
         .body(
             new PersonaResponseDTO(
                 -1L,
-                "Fallback Persona Post Persona",
-                "Fallback Apellidos",
+                throwable.getMessage() != null ? throwable.getMessage() : "Fallback Post Persona",
+                throwable.getClass().getSimpleName(),
                 LocalDate.now(),
-                "0000000000",
+                throwable.getCause() != null ? throwable.getCause().toString() : "N/A",
                 "",
                 "",
                 "",
@@ -100,10 +100,10 @@ public class PersonaController {
         .body(
             new PersonaResponseDTO(
                 -1L,
-                "Fallback Persona Get By Id",
-                "Fallback Apellidos",
+                throwable.getMessage() != null ? throwable.getMessage() : "Fallback Get Persona By Id",
+                throwable.getClass().getSimpleName(),
                 LocalDate.now(),
-                "0000000000",
+                throwable.getCause() != null ? throwable.getCause().toString() : "N/A",
                 "",
                 "",
                 "",
@@ -133,10 +133,10 @@ public class PersonaController {
         .status(HttpStatus.INTERNAL_SERVER_ERROR)
         .body(List.of(new PersonaResponseDTO(
             -1L,
-            "Fallback Persona Get all Personas",
-            "Fallback Apellidos",
+            throwable.getMessage() != null ? throwable.getMessage() : "Fallback Get All Personas",
+            throwable.getClass().getSimpleName(),
             LocalDate.now(),
-            "0000000000",
+            throwable.getCause() != null ? throwable.getCause().toString() : "N/A",
             "",
             "",
             "",

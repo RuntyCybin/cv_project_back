@@ -24,30 +24,50 @@ public class ExperienciaController {
     this.experienciaService = experienciaService;
   }
 
+  /*
+   * ------------------------------------------
+   * HEALTH CHECK
+   * ------------------------------------------
+   */
   @GetMapping
   public ResponseEntity<String> health() {
-    return ResponseEntity.status(HttpStatus.OK)
+    return ResponseEntity
+        .status(HttpStatus.OK)
         .body("Endopoint CV is healthy");
   }
 
+  /*
+   * ------------------------------------------
+   * GET ALL EXPERIENCIAS
+   * ------------------------------------------
+   */
   @GetMapping("/all-experiencia")
   public Page<ExperienciaResponseDTO> getAllExperiencia(@PageableDefault(size = 10, sort = "id") Pageable pageable) {
     return experienciaService.getExperienciaList(pageable);
   }
 
+  /*
+   * ------------------------------------------
+   * GET EXPERIENCIA BY ID
+   * ------------------------------------------
+   */
   @GetMapping("/experiencia/{id}")
   public ResponseEntity<ExperienciaResponseDTO> getExperienciaById(@PathVariable final Long id) {
-
-    ExperienciaResponseDTO experienciaResponseDTO = this.experienciaService.getExperienciaById(id);
-
-    return ResponseEntity.status(HttpStatus.OK)
-        .body(experienciaResponseDTO);
+    return ResponseEntity
+        .status(HttpStatus.OK)
+        .body(this.experienciaService.getExperienciaById(id));
   }
 
+  /*
+   * ------------------------------------------
+   * POST EXPERIENCIA
+   * ------------------------------------------
+   */
   @PostMapping("/add-experiencia")
   public ResponseEntity<String> addExperiencia(@RequestBody ExperienciaRequestDTO experienciaDTO) {
     experienciaService.addExperiencia(experienciaDTO);
-    return ResponseEntity.status(HttpStatus.CREATED)
+    return ResponseEntity
+        .status(HttpStatus.CREATED)
         .body("Experiencia added successfully");
   }
 }
