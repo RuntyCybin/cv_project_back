@@ -10,6 +10,7 @@ public class ExperienciaResponseMapper {
     }
 
     return new ExperienciaResponseDTO(
+        experiencia.getId(),
         experiencia.getPuesto(),
         experiencia.getEmpresa(),
         experiencia.getDescripcion(),

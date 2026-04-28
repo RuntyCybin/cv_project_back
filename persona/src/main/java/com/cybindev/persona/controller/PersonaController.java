@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cybindev.persona.domain.PersonaRequestDTO;
@@ -19,6 +20,7 @@ import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import jakarta.annotation.PostConstruct;
 
 @RestController
+@RequestMapping("/persona")
 public class PersonaController {
 
   private final PersonaService<PersonaResponseDTO, PersonaRequestDTO> service;
@@ -49,7 +51,7 @@ public class PersonaController {
    * POST PERSONA
    * ------------------------------------------
    */
-  @PostMapping("/persona")
+  @PostMapping
   @CircuitBreaker(name = "crearProyecto", fallbackMethod = "crearPersonaFallback")
   public ResponseEntity<PersonaResponseDTO> crearPersona(@RequestBody PersonaRequestDTO requestDTO) {
     PersonaResponseDTO responseDTO = this.service.crearPersona(requestDTO);
@@ -85,7 +87,7 @@ public class PersonaController {
    * GET PERSONA POR ID
    * ------------------------------------------
    */
-  @GetMapping("/persona/{id}")
+  @GetMapping("/{id}")
   @CircuitBreaker(name = "obtenerPersonaPorId", fallbackMethod = "obtenerPersonaPorIdFallback")
   public ResponseEntity<PersonaResponseDTO> obtenerPersonaPorId(@PathVariable Long id) {
     PersonaResponseDTO responseDTO = this.service.obtenerPersonaPorId(id);
@@ -120,7 +122,7 @@ public class PersonaController {
    * GET PERSONAS
    * ------------------------------------------
    */
-  @GetMapping("/all-personas")
+  @GetMapping("/all")
   @CircuitBreaker(name = "listarPersona", fallbackMethod = "listarPersonaFallback")
   public ResponseEntity<List<PersonaResponseDTO>> listarPersona() {
     return ResponseEntity

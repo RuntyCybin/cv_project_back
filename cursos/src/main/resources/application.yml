@@ -15,7 +15,7 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         default_schema: cvdbnicoschema
 server:
-  port: 8083
+  port: 8086
   servlet:
     context-path: /cv
 
@@ -25,7 +25,7 @@ app:
 resilience4j:
   circuitbreaker:
     instances:
-      estudiosService:
+      cursosService:
         registerHealthIndicator: true
         slidingWindowSize: 10
         minimumNumberOfCalls: 5
@@ -33,3 +33,10 @@ resilience4j:
         waitDurationInOpenState: 10000
         permittedNumberOfCallsInHalfOpenState: 3
         slidingWindowType: COUNT_BASED
+
+logging:
+  level:
+    root: DEBUG
+    org.springframework.cache: TRACE
+    org.springframework.data.redis: DEBUG
+    io.github.resilience4j: DEBUG

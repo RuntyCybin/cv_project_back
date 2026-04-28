@@ -12,18 +12,27 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cybindev.cursos.domain.CursoRequestDTO;
 import com.cybindev.cursos.domain.CursoResponseDTO;
+import com.cybindev.cursos.domain.PersonaCursoRequestDTO;
+import com.cybindev.cursos.domain.PersonaCursoResponseDTO;
 import com.cybindev.cursos.service.CursoService;
+import com.cybindev.cursos.service.PersonaCursoService;
 
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import jakarta.annotation.PostConstruct;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @RestController
+@RequestMapping("/cursos")
 public class CursosController {
 
   private final CursoService<CursoResponseDTO, CursoRequestDTO> cursoService;
+  private final PersonaCursoService<PersonaCursoResponseDTO, PersonaCursoRequestDTO> personaCursoService;
 
-  public CursosController(CursoService<CursoResponseDTO, CursoRequestDTO> cursoService) {
+  public CursosController(
+      CursoService<CursoResponseDTO, CursoRequestDTO> cursoService,
+      PersonaCursoService<PersonaCursoResponseDTO, PersonaCursoRequestDTO> personaCursoService) {
     this.cursoService = cursoService;
+    this.personaCursoService = personaCursoService;
   }
 
   @PostConstruct
@@ -47,7 +56,7 @@ public class CursosController {
    * GET ALL CURSOS
    * ---------------------------a---------------
    */
-  @GetMapping("/getCursos")
+  @GetMapping("/all")
   @CircuitBreaker(name = "getAllCursosService", fallbackMethod = "fallbackGetAll")
   public ResponseEntity<List<CursoResponseDTO>> getCursos() {
     return ResponseEntity.status(HttpStatus.OK)
@@ -71,7 +80,7 @@ public class CursosController {
    * POST CURSO
    * ------------------------------------------
    */
-  @PostMapping("/postCurso")
+  @PostMapping
   @CircuitBreaker(name = "postCursoService", fallbackMethod = "fallbackPostCurso")
   public ResponseEntity<CursoResponseDTO> postCurso(@RequestBody CursoRequestDTO request) {
     CursoResponseDTO response = this.cursoService.crearCurso(request);
@@ -98,7 +107,7 @@ public class CursosController {
    * GET CURSO BY ID
    * ------------------------------------------
    */
-  @GetMapping("/getCurso/{id}")
+  @GetMapping("/{id}")
   @CircuitBreaker(name = "getCursoByIdService", fallbackMethod = "fallbackGetById")
   public ResponseEntity<CursoResponseDTO> getCursoById(@PathVariable Long id) {
     CursoResponseDTO response = this.cursoService.obtenerCursoPorId(id);
@@ -118,5 +127,18 @@ public class CursosController {
 
     return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
         .body(fallbackResponse);
+  }
+
+  /*
+   * ------------------------------------------
+   * GET CURSOS BY ID PERSONA
+   * ------------------------------------------
+   */
+  @GetMapping("/persona/{idPersona}")
+  @CircuitBreaker(name = "getCursosByPersonaService", fallbackMethod = "fallbackGetCursosByPersona")
+  public ResponseEntity<List<CursoResponseDTO>> getCursosByPersona(@PathVariable Long idPersona) {
+    List<CursoResponseDTO> response = this.personaCursoService.obtenerCursosPorPersonaId(idPersona);
+    return ResponseEntity.status(HttpStatus.OK)
+        .body(response);
   }
 }

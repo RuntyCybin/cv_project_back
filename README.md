@@ -57,7 +57,9 @@ Guia de puertos del proyecto
   8082 : API datos de persona
   8083 : API autenticacion
   8084 : API experiencias
-  8085 : 
+  8085 : API estudios
+  8086 : API cursos 
+  8087 : API projects
 ```
 
 

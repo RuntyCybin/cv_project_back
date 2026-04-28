@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequestMapping("/projects")
 public class ProjectController {
 
   private final ProyectoService<ProyectoResponseDTO, ProyectoRequestDTO> service;
@@ -41,7 +42,7 @@ public class ProjectController {
    * GET ALL PROYECTOS
    * ------------------------------------------
    */
-  @GetMapping("/getProyectos")
+  @GetMapping("/all")
   @CircuitBreaker(name = "getAllProyectosService", fallbackMethod = "fallBackGetAllProyectos")
   public ResponseEntity<List<ProyectoResponseDTO>> getProyectos() {
     return ResponseEntity.status(HttpStatus.OK)
@@ -63,7 +64,7 @@ public class ProjectController {
    * POST PROYECTOS
    * ------------------------------------------
    */
-  @PostMapping("/postProyecto")
+  @PostMapping
   @CircuitBreaker(name = "createProyctoService", fallbackMethod = "fallBackCreateProyecto")
   public ResponseEntity<ProyectoResponseDTO> postProyecto(@RequestBody ProyectoRequestDTO request) {
     final ProyectoResponseDTO response = this.service.crearProyecto(request);
@@ -87,7 +88,7 @@ public class ProjectController {
    * GET PROYECTO POR ID
    * ------------------------------------------
    */
-  @GetMapping("/getProyecto/{id}")
+  @GetMapping("/{id}")
   @CircuitBreaker(name = "getProyectoPorId", fallbackMethod = "fallBackGetProyectoPorId")
   public ResponseEntity<ProyectoResponseDTO> getCursoPorId(@PathVariable Long id) {
     final ProyectoResponseDTO response = this.service.obtenerProyectoPorId(id);

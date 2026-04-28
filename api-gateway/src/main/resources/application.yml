@@ -25,17 +25,17 @@ spring:
             - Path=/cv/experiencias/**
 
         - id: estudios
-          uri: http://localhost:8085
+          uri: http://estudios:8085
           predicates:
             - Path=/cv/estudios/**
 
         - id: cursos
-          uri: http://localhost:8086
+          uri: http://cursos:8086
           predicates:
             - Path=/cv/cursos/**
 
         - id: projects
-          uri: http://localhost:8087
+          uri: http://projects:8087
           predicates:
             - Path=/cv/projects/**
 
