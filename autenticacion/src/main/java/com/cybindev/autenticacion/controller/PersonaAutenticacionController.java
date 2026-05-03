@@ -90,7 +90,7 @@ public class PersonaAutenticacionController {
   public ResponseEntity<PersonaAutenticacionResponseDTO> getPersonaAutPorIdAutFallback(
       @PathVariable Long idautenticacion, Throwable throwable) {
     logger.error("FALLBACK: Simple name: " + throwable.getClass().getName()
-        + " msg: " + throwable.getCause().getMessage());
+        + " msg: " + throwable.getCause() != null ? throwable.getCause().toString() : "N/A");
     return ResponseEntity
         .status(HttpStatus.INTERNAL_SERVER_ERROR)
         .body(new PersonaAutenticacionResponseDTO(-1L, -1L, -1L));

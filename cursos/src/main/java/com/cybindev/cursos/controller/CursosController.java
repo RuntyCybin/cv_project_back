@@ -141,4 +141,19 @@ public class CursosController {
     return ResponseEntity.status(HttpStatus.OK)
         .body(response);
   }
+
+  public ResponseEntity<List<CursoResponseDTO>> fallbackGetCursosByPersona(@PathVariable Long idPersona,
+      Throwable throwable) {
+    CursoResponseDTO fallbackResponse = new CursoResponseDTO(
+        -1L,
+        throwable.getMessage() != null ? throwable.getMessage() : "Fallback GetCursosByPersona Curso",
+        throwable.getClass().getSimpleName(),
+        throwable.getCause() != null ? throwable.getCause().toString() : "N/A",
+        "N/A",
+        "No se han podido obtener los cursos para la persona con id: " + idPersona,
+        "N/A");
+
+    return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
+        .body(List.of(fallbackResponse));
+  }
 }
