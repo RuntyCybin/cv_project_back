@@ -1,5 +1,7 @@
 package com.cybindev.cvproject.service.impl;
 
+import java.util.Optional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -60,6 +62,19 @@ public class ExperienciaServiceImpl implements ExperienciaService<ExperienciaRes
   public ExperienciaResponseDTO addExperiencia(ExperienciaRequestDTO experienciaDTO) {
 
     if (null != experienciaDTO) {
+
+      // TODO: validar que el la experiencia no exista ya en la base de datos para
+      // este usuario
+      Optional<Experiencia> existingExperiencia = experienciaRepo.findByPuestoAndEmpresa(experienciaDTO.puesto(),
+          experienciaDTO.empresa());
+
+      if (existingExperiencia.isPresent()) {
+        logger.warn("Experiencia con puesto '{}' y empresa '{}' ya existe", experienciaDTO.puesto(),
+            experienciaDTO.empresa());
+        throw new RuntimeException("Experiencia con puesto " + experienciaDTO.puesto() + " y empresa "
+            + experienciaDTO.empresa() + " ya existe");
+      }
+
       Experiencia experiencia = experienciaRequestMapper.toEntity(experienciaDTO);
 
       if (null != experiencia) {

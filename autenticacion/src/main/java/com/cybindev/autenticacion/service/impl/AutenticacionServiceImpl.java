@@ -115,7 +115,6 @@ public class AutenticacionServiceImpl
   @Transactional(readOnly = true)
   public AutenticacionResponseDTO obtenerAutenticacionPorLoginYPassword(
       AutenticacionRequestDTO autenticacionRequest) {
-    logger.info(":::::::::::::::::::::::::::::::::::::::::LLEGO - 0");
     logger.info("Realizando el login con login y password");
 
     if (autenticacionRequest != null) {

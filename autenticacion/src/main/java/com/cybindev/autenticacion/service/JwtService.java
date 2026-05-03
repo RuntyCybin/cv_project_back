@@ -24,6 +24,7 @@ public class JwtService {
   private static final Logger logger = LoggerFactory.getLogger(JwtService.class);
 
   public String generarToken(String login, Long id) {
+    logger.info("Generando token JWT para el usuario: " + login);
     SecretKey key = Keys.hmacShaKeyFor(secret.getBytes());
     Date now = new Date();
     Date expiration = new Date(now.getTime() + expirationSeconds * 1000);
@@ -38,6 +39,7 @@ public class JwtService {
   }
 
   public String extraerLogin(String token) {
+    logger.info("Extrayendo login del token JWT");
     SecretKey key = Keys.hmacShaKeyFor(secret.getBytes());
     return Jwts.parser()
         .verifyWith(key)
@@ -48,6 +50,7 @@ public class JwtService {
   }
 
   public boolean esValido(String token) {
+    logger.info("Verificando validez del token JWT");
     try {
       SecretKey key = Keys.hmacShaKeyFor(secret.getBytes());
       Jwts.parser().verifyWith(key).build().parseSignedClaims(token);

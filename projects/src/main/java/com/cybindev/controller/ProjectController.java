@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequestMapping("/projects")
 public class ProjectController {
 
   private final ProyectoService<ProyectoResponseDTO, ProyectoRequestDTO> service;
@@ -35,18 +36,13 @@ public class ProjectController {
     return ResponseEntity.status(HttpStatus.OK)
         .body("Proyectos controller is healthy");
   }
-  /*
-   * ------------------------------------------
-   * !HEALTH CHECK
-   * ------------------------------------------
-   */
 
   /*
    * ------------------------------------------
    * GET ALL PROYECTOS
    * ------------------------------------------
    */
-  @GetMapping("/getProyectos")
+  @GetMapping("/all")
   @CircuitBreaker(name = "getAllProyectosService", fallbackMethod = "fallBackGetAllProyectos")
   public ResponseEntity<List<ProyectoResponseDTO>> getProyectos() {
     return ResponseEntity.status(HttpStatus.OK)
@@ -57,23 +53,18 @@ public class ProjectController {
     return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
         .body(List.of(new ProyectoResponseDTO(
             -1L,
-            "Fallback GetAll Proyectos",
-            "N/A",
-            "No se han podido obtener los proyectos",
+            throwable.getMessage() != null ? throwable.getMessage() : "Fallback GetAll Proyectos",
+            throwable.getClass().getSimpleName(),
+            throwable.getCause() != null ? throwable.getCause().toString() : "N/A",
             "N/A")));
   }
-  /*
-   * ------------------------------------------
-   * !GET ALL PROYECTOS
-   * ------------------------------------------
-   */
 
   /*
    * ------------------------------------------
    * POST PROYECTOS
    * ------------------------------------------
    */
-  @PostMapping("/postProyecto")
+  @PostMapping
   @CircuitBreaker(name = "createProyctoService", fallbackMethod = "fallBackCreateProyecto")
   public ResponseEntity<ProyectoResponseDTO> postProyecto(@RequestBody ProyectoRequestDTO request) {
     final ProyectoResponseDTO response = this.service.crearProyecto(request);
@@ -86,23 +77,18 @@ public class ProjectController {
     return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
         .body(new ProyectoResponseDTO(
             -1L,
-            "Fallback Create Proyecto",
-            "N/A",
-            "No se han podido crear el proyecto",
+            throwable.getMessage() != null ? throwable.getMessage() : "Fallback Create Proyecto",
+            throwable.getClass().getSimpleName(),
+            throwable.getCause() != null ? throwable.getCause().toString() : "N/A",
             "N/A"));
   }
-  /*
-   * ------------------------------------------
-   * !POST PROYECTOS
-   * ------------------------------------------
-   */
 
   /*
    * ------------------------------------------
    * GET PROYECTO POR ID
    * ------------------------------------------
    */
-  @GetMapping("/getProyecto/{id}")
+  @GetMapping("/{id}")
   @CircuitBreaker(name = "getProyectoPorId", fallbackMethod = "fallBackGetProyectoPorId")
   public ResponseEntity<ProyectoResponseDTO> getCursoPorId(@PathVariable Long id) {
     final ProyectoResponseDTO response = this.service.obtenerProyectoPorId(id);
@@ -115,14 +101,9 @@ public class ProjectController {
     return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
         .body(new ProyectoResponseDTO(
             -1L,
-            "Fallback Get Proyecto",
-            "N/A",
-            "No se ha podido obtener el proyecto por su id",
+            throwable.getMessage() != null ? throwable.getMessage() : "Fallback Get Proyecto",
+            throwable.getClass().getSimpleName(),
+            throwable.getCause() != null ? throwable.getCause().toString() : "N/A",
             "N/A"));
   }
-  /*
-   * ------------------------------------------
-   * !GET PROYECTO POR ID
-   * ------------------------------------------
-   */
 }

@@ -3,13 +3,18 @@ package com.cybindev.service.impl;
 import com.cybindev.domain.*;
 import com.cybindev.repo.ProyectoRepo;
 import com.cybindev.service.ProyectoService;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class ProyectoServiceImpl implements ProyectoService<ProyectoResponseDTO, ProyectoRequestDTO> {
 
+  private final Logger logger = LoggerFactory.getLogger(ProyectoServiceImpl.class);
   private final ProyectoRepo repo;
   private final ProyectoRequestMapper requestMapper;
   private final ProyectResponseMapper responseMapper;
@@ -24,19 +29,19 @@ public class ProyectoServiceImpl implements ProyectoService<ProyectoResponseDTO,
 
   @Override
   public ProyectoResponseDTO crearProyecto(ProyectoRequestDTO requestDTO) {
-    System.out.println("Creando un nuevo proyecto en la base de datos");
-    final Project nuevoProyecto = this.requestMapper.toEntity(requestDTO);
-    final Project guardado = this.repo.save(nuevoProyecto);
-    if (guardado == null) {
-      throw new RuntimeException("El servicio ha fallado al guardar el proyecto");
-    }
+    logger.info("Creando proyecto en la base de datos");
 
-    return this.responseMapper.toDto(guardado);
+    return this.responseMapper.toDto(
+        this.repo.save(
+            Objects.requireNonNull(
+                this.requestMapper.toEntity(
+                    Objects.requireNonNull(requestDTO)))));
   }
 
   @Override
   public ProyectoResponseDTO obtenerProyectoPorId(Long id) {
-    final Project result = this.repo.findById(id)
+    logger.info("Obteniendo proyecto con id: " + id);
+    final Project result = this.repo.findById(Objects.requireNonNull(id))
         .orElseThrow(() -> new RuntimeException("El servicio ha fallado al recoger el proyecto"));
     return this.responseMapper.toDto(result);
   }
