@@ -3,11 +3,13 @@ package com.cybindev.cursos.service.impl;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import com.cybindev.cursos.domain.Curso;
 import com.cybindev.cursos.domain.CursoResponseDTO;
 import com.cybindev.cursos.domain.CursosResponseMapper;
 import com.cybindev.cursos.domain.PersonaCurso;
@@ -20,7 +22,9 @@ import com.cybindev.cursos.repo.PersonaCursoRepo;
 import com.cybindev.cursos.service.PersonaCursoService;
 
 @Service
-public class PersonaCursoServiceImpl implements PersonaCursoService<PersonaCursoResponseDTO, PersonaCursoRequestDTO> {
+public class PersonaCursoServiceImpl
+    implements PersonaCursoService<PersonaCursoResponseDTO, PersonaCursoRequestDTO> {
+
   private final Logger logger = LoggerFactory.getLogger(PersonaCursoServiceImpl.class);
   private final PersonaCursoRepo repo;
   private final CursoRepo cursoRepo;
@@ -70,18 +74,18 @@ public class PersonaCursoServiceImpl implements PersonaCursoService<PersonaCurso
     }
     logger.info("Obteniendo relacion persona-curso por ID de persona: {}", personaId);
 
-    List<PersonaCurso> relaciones = this.repo.findByPersonaId(personaId);
-    if (relaciones.isEmpty()) {
+    List<PersonaCurso> personaCursos = this.repo.findByPersonaId(personaId);
+    if (personaCursos.isEmpty()) {
       throw new RuntimeException("No se encontraron relaciones para la persona con id: " + personaId);
     }
-    return relaciones.stream()
-        .map(pc -> {
-          Long cursoId = Objects.requireNonNull(pc.getCursoId());
-          return this.cursoRepo.findById(cursoId)
-              .map(this.cursoResponseMapper::toDto)
-              .orElseThrow(() -> new RuntimeException("Curso no encontrado con id: " + cursoId));
-        })
-        .toList();
+
+    List<Long> cursoIds = personaCursos.stream()
+        .map(pc -> pc.getCursoId())
+        .collect(Collectors.toList());
+    List<Curso> cursos = this.cursoRepo.findAllById(Objects.requireNonNull(cursoIds));
+    return cursos.stream()
+        .map(c -> this.cursoResponseMapper.toDto(c))
+        .collect(Collectors.toList());
   }
 
 }
