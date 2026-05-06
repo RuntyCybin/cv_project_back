@@ -80,7 +80,6 @@ public class PersonaAutenticacionController {
   @CircuitBreaker(name = "getPersonaAutenticacionPorIdAutenticacion", fallbackMethod = "getPersonaAutPorIdAutFallback")
   public ResponseEntity<PersonaAutenticacionResponseDTO> obtenerPersonaAuthPorIdAuth(
       @PathVariable Long idautenticacion) {
-    logger.info(":::::::::::::::::ENTRO con id autenticacion: " + idautenticacion);
     return ResponseEntity
         .status(HttpStatus.OK)
         .body(this.personaAutenticacionService

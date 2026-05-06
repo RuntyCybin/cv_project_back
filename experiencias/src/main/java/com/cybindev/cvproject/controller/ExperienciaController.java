@@ -1,5 +1,7 @@
 package com.cybindev.cvproject.controller;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,7 +19,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cybindev.cvproject.domain.ExperienciaRequestDTO;
 import com.cybindev.cvproject.domain.ExperienciaResponseDTO;
+import com.cybindev.cvproject.domain.PersonaExperiencia;
+import com.cybindev.cvproject.domain.PersonaExperienciaRequestDTO;
+import com.cybindev.cvproject.domain.PersonaExperienciaResponseDTO;
 import com.cybindev.cvproject.service.ExperienciaService;
+import com.cybindev.cvproject.service.PersonaExperienciaService;
 
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 
@@ -27,9 +33,12 @@ public class ExperienciaController {
 
   private final Logger logger = LoggerFactory.getLogger(ExperienciaController.class);
   private final ExperienciaService<ExperienciaResponseDTO, ExperienciaRequestDTO> experienciaService;
+  private final PersonaExperienciaService<PersonaExperienciaResponseDTO, PersonaExperienciaRequestDTO> personaExperienciaService;
 
-  public ExperienciaController(ExperienciaService<ExperienciaResponseDTO, ExperienciaRequestDTO> experienciaService) {
+  public ExperienciaController(ExperienciaService<ExperienciaResponseDTO, ExperienciaRequestDTO> experienciaService,
+      PersonaExperienciaService<PersonaExperienciaResponseDTO, PersonaExperienciaRequestDTO> personaExperienciaService) {
     this.experienciaService = experienciaService;
+    this.personaExperienciaService = personaExperienciaService;
   }
 
   /*
@@ -108,5 +117,32 @@ public class ExperienciaController {
             throwable.getCause() != null ? throwable.getCause().toString() : "N/A",
             "01-1970",
             "01-1970"));
+  }
+
+  /*
+   * ------------------------------------------
+   * GET EXPERIENCIAS POR PERSONA ID
+   * ------------------------------------------
+   */
+  @GetMapping("/persona/{personaId}")
+  @CircuitBreaker(name = "getExperienciasByPersonaId", fallbackMethod = "getExperienciasByPersonaIdFallback")
+  public ResponseEntity<List<ExperienciaResponseDTO>> getExperienciasByPersonaId(@PathVariable Long personaId,
+      @PageableDefault(size = 10, sort = "id") Pageable pageable) {
+    List<ExperienciaResponseDTO> response = personaExperienciaService.obtenerExperienciasPorPersonaId(personaId);
+    return ResponseEntity.status(HttpStatus.OK)
+        .body(response);
+  }
+
+  public ResponseEntity<List<ExperienciaResponseDTO>> getExperienciasByPersonaIdFallback(@PathVariable Long personaId,
+      @PageableDefault(size = 10, sort = "id") Pageable pageable, Throwable throwable) {
+    logger.error("Error al obtener experiencias para persona con id: " + personaId);
+    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+        .body(List.of(new ExperienciaResponseDTO(
+            -1L,
+            throwable.getMessage() != null ? throwable.getMessage() : "Fallback Get Experiencias By Persona Id",
+            throwable.getClass().getSimpleName(),
+            throwable.getCause() != null ? throwable.getCause().toString() : "N/A",
+            "01-1970",
+            "01-1970")));
   }
 }

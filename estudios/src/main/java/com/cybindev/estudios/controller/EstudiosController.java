@@ -13,7 +13,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cybindev.estudios.domain.EstudioRequestDTO;
 import com.cybindev.estudios.domain.EstudioResponseDTO;
+import com.cybindev.estudios.domain.PersonaEstudioRequestDTO;
+import com.cybindev.estudios.domain.PersonaEstudioResponseDTO;
 import com.cybindev.estudios.service.EstudioService;
+import com.cybindev.estudios.service.PersonaEstudioService;
 
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import jakarta.annotation.PostConstruct;
@@ -23,9 +26,12 @@ import jakarta.annotation.PostConstruct;
 public class EstudiosController {
 
   private final EstudioService<EstudioResponseDTO, EstudioRequestDTO> estudioService;
+  private final PersonaEstudioService<PersonaEstudioResponseDTO, PersonaEstudioRequestDTO> personaEstudioService;
 
-  public EstudiosController(EstudioService<EstudioResponseDTO, EstudioRequestDTO> estudioService) {
+  public EstudiosController(EstudioService<EstudioResponseDTO, EstudioRequestDTO> estudioService,
+      PersonaEstudioService<PersonaEstudioResponseDTO, PersonaEstudioRequestDTO> personaEstudioService) {
     this.estudioService = estudioService;
+    this.personaEstudioService = personaEstudioService;
   }
 
   @PostConstruct
@@ -119,5 +125,33 @@ public class EstudiosController {
 
     return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
         .body(fallbackResponse);
+  }
+
+  /*
+   * ------------------------------------------
+   * GET ESTUDIOS BY PERSONA ID
+   * ------------------------------------------
+   */
+  @GetMapping("/persona/{personaId}")
+  @CircuitBreaker(name = "getEstudiosByPersonaIdService", fallbackMethod = "fallbackGetByPersonaId")
+  public ResponseEntity<List<EstudioResponseDTO>> getEstudiosByPersonaId(@PathVariable Long personaId) {
+    List<EstudioResponseDTO> estudios = personaEstudioService.obtenerEstudiosPorPersonaId(personaId);
+
+    return ResponseEntity.status(HttpStatus.OK)
+        .body(estudios);
+  }
+
+  public ResponseEntity<List<EstudioResponseDTO>> fallbackGetByPersonaId(@PathVariable Long personaId,
+      Throwable throwable) {
+    EstudioResponseDTO fallbackResponse = new EstudioResponseDTO(
+        -1L,
+        throwable.getMessage() != null ? throwable.getMessage() : "Fallback GetEstudiosByPersonaId",
+        throwable.getClass().getSimpleName(),
+        throwable.getCause() != null ? throwable.getCause().toString() : "N/A",
+        "Fallback response due to service unavailability",
+        "No Courses");
+
+    return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
+        .body(List.of(fallbackResponse));
   }
 }
