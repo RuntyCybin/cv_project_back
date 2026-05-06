@@ -1,7 +1,10 @@
 package com.cybindev.controller;
 
+import com.cybindev.domain.PersonaProyectoRequestDTO;
+import com.cybindev.domain.PersonaProyectoResponseDTO;
 import com.cybindev.domain.ProyectoRequestDTO;
 import com.cybindev.domain.ProyectoResponseDTO;
+import com.cybindev.service.PersonaProjectsService;
 import com.cybindev.service.ProyectoService;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import jakarta.annotation.PostConstruct;
@@ -16,9 +19,12 @@ import java.util.List;
 public class ProjectController {
 
   private final ProyectoService<ProyectoResponseDTO, ProyectoRequestDTO> service;
+  private final PersonaProjectsService<PersonaProyectoResponseDTO, PersonaProyectoRequestDTO> personaProjectsService;
 
-  public ProjectController(ProyectoService<ProyectoResponseDTO, ProyectoRequestDTO> s) {
+  public ProjectController(ProyectoService<ProyectoResponseDTO, ProyectoRequestDTO> s,
+      PersonaProjectsService<PersonaProyectoResponseDTO, PersonaProyectoRequestDTO> personaProjectsService) {
     this.service = s;
+    this.personaProjectsService = personaProjectsService;
   }
 
   @PostConstruct
@@ -105,5 +111,29 @@ public class ProjectController {
             throwable.getClass().getSimpleName(),
             throwable.getCause() != null ? throwable.getCause().toString() : "N/A",
             "N/A"));
+  }
+
+  /*
+   * ------------------------------------------
+   * GET PROYECTOS POR PERSONA ID
+   * ------------------------------------------
+   */
+  @GetMapping("/persona/{personaId}")
+  @CircuitBreaker(name = "getProyectosPorPersonaId", fallbackMethod = "fallBackGetProyectosPorPersonaId")
+  public ResponseEntity<List<ProyectoResponseDTO>> getProyectosPorPersonaId(@PathVariable Long personaId) {
+    List<ProyectoResponseDTO> response = this.personaProjectsService.obtenerProjectsPorPersonaId(personaId);
+    return ResponseEntity.status(HttpStatus.OK)
+        .body(response);
+  }
+
+  public ResponseEntity<List<ProyectoResponseDTO>> fallBackGetProyectosPorPersonaId(@PathVariable Long personaId,
+      Throwable throwable) {
+    return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
+        .body(List.of(new ProyectoResponseDTO(
+            -1L,
+            throwable.getMessage() != null ? throwable.getMessage() : "Fallback Get Proyectos Por Persona ID",
+            throwable.getClass().getSimpleName(),
+            throwable.getCause() != null ? throwable.getCause().toString() : "N/A",
+            "N/A")));
   }
 }

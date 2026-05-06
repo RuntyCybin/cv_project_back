@@ -1,6 +1,7 @@
 package com.cybindev.estudios.service.impl;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -44,10 +45,8 @@ public class PersonaEstudioServiceImpl
 
   @Override
   public PersonaEstudioResponseDTO crearPersonaEstudio(PersonaEstudioRequestDTO personaEstudio) {
-    if (personaEstudio.personaId() <= 0 || personaEstudio.estudioId() <= 0) {
-      logger.warn("IDs de persona o estudio no válidos: personaId={}, estudioId={}", personaEstudio.personaId(),
-          personaEstudio.estudioId());
-      throw new IllegalArgumentException("Los IDs de persona y estudio deben ser números positivos");
+    if (null == personaEstudio) {
+      throw new IllegalArgumentException("El DTO personaEstudio no puede ser nulo");
     }
     logger.info("Creando relacion persona-estudio para personaId: {} y estudioId: {}",
         personaEstudio.personaId(), personaEstudio.estudioId());
@@ -61,11 +60,10 @@ public class PersonaEstudioServiceImpl
 
   @Override
   public PersonaEstudioResponseDTO obtenerPersonaEstudioPorId(Long id) {
-    logger.info("Obteniendo relacion persona-estudio por ID: {}", id);
     if (id <= 0) {
-      logger.warn("ID de persona no válido: {}", id);
       throw new IllegalArgumentException("El ID de persona debe ser un número positivo");
     }
+    logger.info("Obteniendo relacion persona-estudio por ID: {}", id);
 
     return this.repo.findById(id)
         .map(this.responseMapper::toDTO)
@@ -75,7 +73,6 @@ public class PersonaEstudioServiceImpl
   @Override
   public List<EstudioResponseDTO> obtenerEstudiosPorPersonaId(Long personaId) {
     if (personaId <= 0) {
-      logger.warn("ID de persona no válido: {}", personaId);
       throw new IllegalArgumentException("El ID de persona debe ser un número positivo");
     }
     logger.info("Obteniendo estudios para persona con id: {}", personaId);
@@ -90,7 +87,7 @@ public class PersonaEstudioServiceImpl
         .map(pe -> pe.getEstudioId())
         .toList();
 
-    List<Estudio> estudios = this.estudioRepo.findAllById(estudioIds);
+    List<Estudio> estudios = this.estudioRepo.findAllById(Objects.requireNonNull(estudioIds));
     return estudios.stream()
         .map(this.estudioResponseMapper::toDto)
         .toList();

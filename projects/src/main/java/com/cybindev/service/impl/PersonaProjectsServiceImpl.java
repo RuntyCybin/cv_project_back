@@ -44,6 +44,9 @@ public class PersonaProjectsServiceImpl
 
   @Override
   public PersonaProyectoResponseDTO crearPersonaProject(PersonaProyectoRequestDTO personaProject) {
+    if (null == personaProject) {
+      throw new IllegalArgumentException("El DTO personaProject no puede ser nulo");
+    }
     logger.info("Creando una nueva relacion persona-project en la base de datos");
 
     return Optional.ofNullable(personaProject)

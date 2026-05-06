@@ -45,7 +45,9 @@ public class PersonaExperienciaServiceImpl
 
   @Override
   public PersonaExperienciaResponseDTO crearPersonaExperiencia(PersonaExperienciaRequestDTO personaExperiencia) {
-    Objects.requireNonNull(personaExperiencia, "El DTO personaExperiencia no puede ser nulo");
+    if (null == personaExperiencia) {
+      throw new IllegalArgumentException("El DTO personaExperiencia no puede ser nulo");
+    }
     logger.info("Creando experiencia para persona: {}", personaExperiencia.personaId());
 
     return Optional.ofNullable(personaExperiencia)
@@ -57,7 +59,11 @@ public class PersonaExperienciaServiceImpl
 
   @Override
   public PersonaExperienciaResponseDTO obtenerPersonaExperienciaPorId(Long id) {
-    Objects.requireNonNull(id, "El ID de la experiencia no puede ser nulo");
+    if (id <= 0) {
+      throw new IllegalArgumentException("El ID de la experiencia debe ser un número positivo");
+    }
+    logger.info("Obteniendo experiencia por ID: {}", id);
+
     return this.repo.findById(id)
         .map(this.responseMapper::toDTO)
         .orElseThrow(() -> new RuntimeException("No se encontró la experiencia con id: " + id));
@@ -65,7 +71,11 @@ public class PersonaExperienciaServiceImpl
 
   @Override
   public List<ExperienciaResponseDTO> obtenerExperienciasPorPersonaId(Long personaId) {
-    Objects.requireNonNull(personaId, "El ID de la persona no puede ser nulo");
+    if (personaId <= 0) {
+      throw new IllegalArgumentException("El ID de la persona debe ser un número positivo");
+    }
+    logger.info("Obteniendo experiencias para persona con id: {}", personaId);
+
     List<PersonaExperiencia> personaExperiencias = this.repo.findByPersonaId(personaId);
 
     if (personaExperiencias.isEmpty()) {

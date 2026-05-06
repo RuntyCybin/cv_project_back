@@ -46,6 +46,9 @@ public class PersonaCursoServiceImpl
 
   @Override
   public PersonaCursoResponseDTO crearPersonaCurso(PersonaCursoRequestDTO personaCurso) {
+    if (null == personaCurso) {
+      throw new IllegalArgumentException("El DTO personaCurso no puede ser nulo");
+    }
     logger.info("Creando una nueva relacion persona-curso en la base de datos");
 
     return Optional.ofNullable(personaCurso)
@@ -58,10 +61,11 @@ public class PersonaCursoServiceImpl
 
   @Override
   public PersonaCursoResponseDTO obtenerPersonaCursoPorId(Long id) {
-    logger.info("Obteniendo relacion persona-curso por ID: {}", id);
     if (id <= 0) {
       throw new IllegalArgumentException("El ID debe ser mayor que 0");
     }
+    logger.info("Obteniendo relacion persona-curso por ID: {}", id);
+
     return this.repo.findById(id)
         .map(this.responseMapper::toDto)
         .orElseThrow(() -> new RuntimeException("PersonaCurso no encontrado con id: " + id));
