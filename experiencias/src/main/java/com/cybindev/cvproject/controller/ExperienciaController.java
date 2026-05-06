@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cybindev.cvproject.domain.ExperienciaRequestDTO;
 import com.cybindev.cvproject.domain.ExperienciaResponseDTO;
-import com.cybindev.cvproject.domain.PersonaExperiencia;
 import com.cybindev.cvproject.domain.PersonaExperienciaRequestDTO;
 import com.cybindev.cvproject.domain.PersonaExperienciaResponseDTO;
 import com.cybindev.cvproject.service.ExperienciaService;
