@@ -1,6 +1,8 @@
 package com.cybindev.estudios.service.impl;
 
+import java.lang.foreign.Linker.Option;
 import java.util.List;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,8 +45,19 @@ public class PersonaEstudioServiceImpl
 
   @Override
   public PersonaEstudioResponseDTO crearPersonaEstudio(PersonaEstudioRequestDTO personaEstudio) {
-    // TODO Auto-generated method stub
-    return null;
+    if (personaEstudio.personaId() <= 0 || personaEstudio.estudioId() <= 0) {
+      logger.warn("IDs de persona o estudio no válidos: personaId={}, estudioId={}", personaEstudio.personaId(),
+          personaEstudio.estudioId());
+      throw new IllegalArgumentException("Los IDs de persona y estudio deben ser números positivos");
+    }
+    logger.info("Creando relacion persona-estudio para personaId: {} y estudioId: {}",
+        personaEstudio.personaId(), personaEstudio.estudioId());
+
+    return Optional.ofNullable(personaEstudio)
+        .map(this.requestMapper::toEntity)
+        .map(this.repo::save)
+        .map(this.responseMapper::toDTO)
+        .orElseThrow(() -> new IllegalArgumentException("El DTO personaEstudio no puede ser nulo"));
   }
 
   @Override
