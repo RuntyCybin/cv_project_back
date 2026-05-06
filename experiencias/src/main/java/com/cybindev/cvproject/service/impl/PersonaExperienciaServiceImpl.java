@@ -1,6 +1,7 @@
 package com.cybindev.cvproject.service.impl;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -44,6 +45,7 @@ public class PersonaExperienciaServiceImpl
 
   @Override
   public PersonaExperienciaResponseDTO crearPersonaExperiencia(PersonaExperienciaRequestDTO personaExperiencia) {
+    Objects.requireNonNull(personaExperiencia, "El DTO personaExperiencia no puede ser nulo");
     logger.info("Creando experiencia para persona: {}", personaExperiencia.personaId());
 
     return Optional.ofNullable(personaExperiencia)
@@ -55,6 +57,7 @@ public class PersonaExperienciaServiceImpl
 
   @Override
   public PersonaExperienciaResponseDTO obtenerPersonaExperienciaPorId(Long id) {
+    Objects.requireNonNull(id, "El ID de la experiencia no puede ser nulo");
     return this.repo.findById(id)
         .map(this.responseMapper::toDTO)
         .orElseThrow(() -> new RuntimeException("No se encontró la experiencia con id: " + id));
@@ -62,6 +65,7 @@ public class PersonaExperienciaServiceImpl
 
   @Override
   public List<ExperienciaResponseDTO> obtenerExperienciasPorPersonaId(Long personaId) {
+    Objects.requireNonNull(personaId, "El ID de la persona no puede ser nulo");
     List<PersonaExperiencia> personaExperiencias = this.repo.findByPersonaId(personaId);
 
     if (personaExperiencias.isEmpty()) {
@@ -72,7 +76,7 @@ public class PersonaExperienciaServiceImpl
         .map(pe -> pe.getExperienciaId())
         .toList();
 
-    List<Experiencia> experiencias = this.experienciaRepo.findAllById(experienciaIds);
+    List<Experiencia> experiencias = this.experienciaRepo.findAllById(Objects.requireNonNull(experienciaIds));
 
     return experiencias.stream()
         .map(this.experienciaResponseMapper::toDto)
