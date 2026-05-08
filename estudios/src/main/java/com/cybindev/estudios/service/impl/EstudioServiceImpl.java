@@ -1,7 +1,10 @@
 package com.cybindev.estudios.service.impl;
 
 import java.util.List;
+import java.util.Objects;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.cybindev.estudios.domain.Estudio;
@@ -15,6 +18,7 @@ import com.cybindev.estudios.service.EstudioService;
 @Service
 public class EstudioServiceImpl implements EstudioService<EstudioResponseDTO, EstudioRequestDTO> {
 
+  private final Logger logger = LoggerFactory.getLogger(EstudioServiceImpl.class);
   private final EstudiosRepo repo;
   private final EstudioRequestMapper mapperRequest;
   private final EstudioResponseMapper mapperResponse;
@@ -31,14 +35,14 @@ public class EstudioServiceImpl implements EstudioService<EstudioResponseDTO, Es
    */
   @Override
   public List<EstudioResponseDTO> listarEstudios() {
-    System.out.println("Listing all estudios from the database");
+    logger.info("Listing all estudios from the database");
+
     List<Estudio> estudios = repo.findAll();
-    System.out.println("Found " + estudios.size() + " estudios in the database");
-    if (estudios.size() == 0) {
+    if (estudios.isEmpty()) {
       throw new RuntimeException("No se han recogido estudios");
     }
     return estudios.stream()
-        .map(estudio -> this.mapperResponse.toDto(estudio))
+        .map(estudio -> this.mapperResponse.toDto(Objects.requireNonNull(estudio)))
         .toList();
   }
 
@@ -47,14 +51,10 @@ public class EstudioServiceImpl implements EstudioService<EstudioResponseDTO, Es
    */
   @Override
   public EstudioResponseDTO crearEstudio(EstudioRequestDTO estudioDto) {
-    System.out.println("Creating a new estudio in the database");
-    Estudio nuevoEstudio = this.mapperRequest.toEntity(estudioDto);
-    Estudio guardado = repo.save(nuevoEstudio);
-    if (guardado == null) {
-      throw new RuntimeException("Service Failed to save Estudio");
-    }
-
-    return this.mapperResponse.toDto(guardado);
+    logger.info("Creating a new estudio in the database");
+    return this.mapperResponse.toDto(
+        repo.save(
+            Objects.requireNonNull(this.mapperRequest.toEntity(estudioDto))));
   }
 
   /*
@@ -62,14 +62,11 @@ public class EstudioServiceImpl implements EstudioService<EstudioResponseDTO, Es
    */
   @Override
   public EstudioResponseDTO obtenerEstudioPorId(Long id) {
-    System.out.println("Obteniendo estudio con id: " + id);
-    Estudio estudio = repo.findById(id)
-        .orElseThrow(() -> new RuntimeException("Estudio not found with id: " + id));
+    logger.info("Obteniendo estudio con id: " + id);
 
-    if (estudio == null) {
-      throw new RuntimeException("Service failure to obtain an Estudio");
-    }
-    return this.mapperResponse.toDto(estudio);
+    return this.mapperResponse.toDto(
+        repo.findById(Objects.requireNonNull(id))
+            .orElseThrow(() -> new RuntimeException("Estudio not found with id: " + id)));
   }
 
 }

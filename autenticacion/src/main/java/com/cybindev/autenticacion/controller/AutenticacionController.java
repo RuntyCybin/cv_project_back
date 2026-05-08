@@ -43,11 +43,6 @@ public class AutenticacionController {
         .status(HttpStatus.OK)
         .body("Autenticacion controller is healthy");
   }
-  /*
-   * ------------------------------------------
-   * !HEALTH CHECK
-   * ------------------------------------------
-   */
 
   /*
    * ------------------------------------------
@@ -67,13 +62,12 @@ public class AutenticacionController {
       @RequestBody AutenticacionRequestDTO requestDTO, Throwable throwable) {
     return ResponseEntity
         .status(HttpStatus.INTERNAL_SERVER_ERROR)
-        .body(new AutenticacionResponseDTO(-1L, throwable.getMessage(), "Fallback Password", null));
+        .body(new AutenticacionResponseDTO(
+            -1L,
+            throwable.getMessage(),
+            "Fallback Password",
+            null));
   }
-  /*
-   * ------------------------------------------
-   * !POST AUTENTICACION
-   * ------------------------------------------
-   */
 
   /*
    * ------------------------------------------
@@ -95,11 +89,6 @@ public class AutenticacionController {
         .status(HttpStatus.INTERNAL_SERVER_ERROR)
         .body(new AutenticacionResponseDTO(-1L, "Fallback Login", "Fallback Password", null));
   }
-  /*
-   * ------------------------------------------
-   * !GET AUTENTICACION POR ID
-   * ------------------------------------------
-   */
 
   /*
    * ------------------------------------------
@@ -121,11 +110,6 @@ public class AutenticacionController {
         .status(HttpStatus.INTERNAL_SERVER_ERROR)
         .body(new AutenticacionResponseDTO(-1L, "Fallback Login", "Fallback Password", null));
   }
-  /*
-   * ------------------------------------------
-   * !GET AUTENTICACION POR LOGIN
-   * ------------------------------------------
-   */
 
   /*
    * ------------------------------------------
@@ -152,9 +136,4 @@ public class AutenticacionController {
             throwable.getCause().getMessage(),
             null));
   }
-  /*
-   * ------------------------------------------
-   * !POST AUTENTICACION POR LOGIN Y PASSWORD
-   * ------------------------------------------
-   */
 }

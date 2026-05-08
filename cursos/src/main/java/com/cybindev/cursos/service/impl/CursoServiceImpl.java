@@ -1,9 +1,10 @@
 package com.cybindev.cursos.service.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.util.List;
-
+import java.util.Objects;
 import org.springframework.stereotype.Service;
-
 import com.cybindev.cursos.domain.Curso;
 import com.cybindev.cursos.domain.CursoRequestDTO;
 import com.cybindev.cursos.domain.CursoResponseDTO;
@@ -15,6 +16,7 @@ import com.cybindev.cursos.service.CursoService;
 @Service
 public class CursoServiceImpl implements CursoService<CursoResponseDTO, CursoRequestDTO> {
 
+  private static final Logger logger = LoggerFactory.getLogger(CursoServiceImpl.class);
   private final CursoRepo repo;
   private final CursosRequestMapper requestMapper;
   private final CursosResponseMapper responseMapper;
@@ -28,27 +30,25 @@ public class CursoServiceImpl implements CursoService<CursoResponseDTO, CursoReq
 
   @Override
   public CursoResponseDTO crearCurso(CursoRequestDTO curso) {
-    System.out.println("Creando un nuevo curso en la base de datos");
-    final Curso nuevoCurso = this.requestMapper.toEntity(curso);
-    final Curso guardado = this.repo.save(nuevoCurso);
-    if (guardado == null) {
-      throw new RuntimeException("El servicio ha fallado al guardar el curso");
-    }
-
+    logger.info("Creando un nuevo curso en la base de datos");
+    final Curso guardado = this.repo.save(
+        Objects.requireNonNull(
+            this.requestMapper.toEntity(curso)));
+    logger.info("Curso guardado correctamente: " + guardado);
     return this.responseMapper.toDto(guardado);
   }
 
   @Override
   public CursoResponseDTO obtenerCursoPorId(Long id) {
-    System.out.println("Obteniendo curso con id: " + id);
-    final Curso curso = this.repo.findById(id)
+    logger.info("Obteniendo curso con id: " + id);
+    final Curso curso = this.repo.findById(Objects.requireNonNull(id))
         .orElseThrow(() -> new RuntimeException("Curso no encontrado con id: " + id));
     return this.responseMapper.toDto(curso);
   }
 
   @Override
   public List<CursoResponseDTO> listarCursos() {
-    System.out.println("Listado de cursos de la base de datos");
+    logger.info("Listado de cursos de la base de datos");
     final List<Curso> cursos = this.repo.findAll();
     if (cursos.size() == 0) {
       throw new RuntimeException("No se han recogido cursos");

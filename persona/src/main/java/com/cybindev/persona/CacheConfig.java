@@ -1,6 +1,7 @@
 package com.cybindev.persona;
 
 import java.time.Duration;
+import java.util.Objects;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,8 +19,6 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 @Configuration
 public class CacheConfig {
 
-  private static final Duration TEN_MINUTES = Duration.ofMinutes(10);
-
   @Bean
   public RedisCacheConfiguration redisCacheConfiguration() {
     ObjectMapper mapper = new ObjectMapper()
@@ -27,11 +26,11 @@ public class CacheConfig {
         .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
         .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
-    Jackson2JsonRedisSerializer<PersonaResponseDTO> serializer = new Jackson2JsonRedisSerializer<>(mapper,
+    Jackson2JsonRedisSerializer<PersonaResponseDTO> serializer = new Jackson2JsonRedisSerializer<>(Objects.requireNonNull(mapper),
         PersonaResponseDTO.class);
 
     return RedisCacheConfiguration.defaultCacheConfig()
-        .entryTtl(TEN_MINUTES)
+        .entryTtl(Objects.requireNonNull(Duration.ofMinutes(10)))
         .serializeKeysWith(
             RedisSerializationContext.SerializationPair
                 .fromSerializer(new StringRedisSerializer()))

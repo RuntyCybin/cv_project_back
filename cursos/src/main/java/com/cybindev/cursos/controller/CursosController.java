@@ -12,18 +12,27 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cybindev.cursos.domain.CursoRequestDTO;
 import com.cybindev.cursos.domain.CursoResponseDTO;
+import com.cybindev.cursos.domain.PersonaCursoRequestDTO;
+import com.cybindev.cursos.domain.PersonaCursoResponseDTO;
 import com.cybindev.cursos.service.CursoService;
+import com.cybindev.cursos.service.PersonaCursoService;
 
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import jakarta.annotation.PostConstruct;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @RestController
+@RequestMapping("/cursos")
 public class CursosController {
 
   private final CursoService<CursoResponseDTO, CursoRequestDTO> cursoService;
+  private final PersonaCursoService<PersonaCursoResponseDTO, PersonaCursoRequestDTO> personaCursoService;
 
-  public CursosController(CursoService<CursoResponseDTO, CursoRequestDTO> cursoService) {
+  public CursosController(
+      CursoService<CursoResponseDTO, CursoRequestDTO> cursoService,
+      PersonaCursoService<PersonaCursoResponseDTO, PersonaCursoRequestDTO> personaCursoService) {
     this.cursoService = cursoService;
+    this.personaCursoService = personaCursoService;
   }
 
   @PostConstruct
@@ -41,18 +50,13 @@ public class CursosController {
     return ResponseEntity.status(HttpStatus.OK)
         .body("Cursos controller is healthy");
   }
-  /*
-   * ------------------------------------------
-   * !HEALTH CHECK
-   * ------------------------------------------
-   */
 
   /*
    * ------------------------------------------
    * GET ALL CURSOS
    * ---------------------------a---------------
    */
-  @GetMapping("/getCursos")
+  @GetMapping("/all")
   @CircuitBreaker(name = "getAllCursosService", fallbackMethod = "fallbackGetAll")
   public ResponseEntity<List<CursoResponseDTO>> getCursos() {
     return ResponseEntity.status(HttpStatus.OK)
@@ -63,25 +67,20 @@ public class CursosController {
     return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
         .body(List.of(new CursoResponseDTO(
             -1L,
-            "Fallback GetAll Curso",
-            "N/A",
-            "N/A",
+            throwable.getMessage() != null ? throwable.getMessage() : "Fallback GetAll Curso",
+            throwable.getClass().getSimpleName(),
+            throwable.getCause() != null ? throwable.getCause().toString() : "N/A",
             "N/A",
             "No se han podido obtener los cursos",
             "N/A")));
   }
-  /*
-   * ------------------------------------------
-   * !GET ALL CURSOS
-   * ------------------------------------------
-   */
 
   /*
    * ------------------------------------------
    * POST CURSO
    * ------------------------------------------
    */
-  @PostMapping("/postCurso")
+  @PostMapping
   @CircuitBreaker(name = "postCursoService", fallbackMethod = "fallbackPostCurso")
   public ResponseEntity<CursoResponseDTO> postCurso(@RequestBody CursoRequestDTO request) {
     CursoResponseDTO response = this.cursoService.crearCurso(request);
@@ -92,9 +91,9 @@ public class CursosController {
   public ResponseEntity<CursoResponseDTO> fallbackPostCurso(@RequestBody CursoRequestDTO request, Throwable throwable) {
     CursoResponseDTO fallbackResponse = new CursoResponseDTO(
         -1L,
-        "Fallback Post Curso",
-        "N/A",
-        "N/A",
+        throwable.getMessage() != null ? throwable.getMessage() : "Fallback Post Curso",
+        throwable.getClass().getSimpleName(),
+        throwable.getCause() != null ? throwable.getCause().toString() : "N/A",
         "N/A",
         "No se ha podido crear el curso",
         "N/A");
@@ -102,18 +101,13 @@ public class CursosController {
     return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
         .body(fallbackResponse);
   }
-  /*
-   * ------------------------------------------
-   * !POST CURSO
-   * ------------------------------------------
-   */
 
   /*
    * ------------------------------------------
    * GET CURSO BY ID
    * ------------------------------------------
    */
-  @GetMapping("/getCurso/{id}")
+  @GetMapping("/{id}")
   @CircuitBreaker(name = "getCursoByIdService", fallbackMethod = "fallbackGetById")
   public ResponseEntity<CursoResponseDTO> getCursoById(@PathVariable Long id) {
     CursoResponseDTO response = this.cursoService.obtenerCursoPorId(id);
@@ -124,9 +118,9 @@ public class CursosController {
   public ResponseEntity<CursoResponseDTO> fallbackGetById(@PathVariable Long id, Throwable throwable) {
     CursoResponseDTO fallbackResponse = new CursoResponseDTO(
         -1L,
-        "Fallback GetById Curso",
-        "N/A",
-        "N/A",
+        throwable.getMessage() != null ? throwable.getMessage() : "Fallback GetCursoById Curso",
+        throwable.getClass().getSimpleName(),
+        throwable.getCause() != null ? throwable.getCause().toString() : "N/A",
         "N/A",
         "No se ha podido obtener el curso con id: " + id,
         "N/A");
@@ -134,10 +128,32 @@ public class CursosController {
     return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
         .body(fallbackResponse);
   }
+
   /*
    * ------------------------------------------
-   * !GET CURSO BY ID
+   * GET CURSOS BY ID PERSONA
    * ------------------------------------------
    */
+  @GetMapping("/persona/{idPersona}")
+  @CircuitBreaker(name = "getCursosByPersonaService", fallbackMethod = "fallbackGetCursosByPersona")
+  public ResponseEntity<List<CursoResponseDTO>> getCursosByPersona(@PathVariable Long idPersona) {
+    List<CursoResponseDTO> response = this.personaCursoService.obtenerCursosPorPersonaId(idPersona);
+    return ResponseEntity.status(HttpStatus.OK)
+        .body(response);
+  }
 
+  public ResponseEntity<List<CursoResponseDTO>> fallbackGetCursosByPersona(@PathVariable Long idPersona,
+      Throwable throwable) {
+    CursoResponseDTO fallbackResponse = new CursoResponseDTO(
+        -1L,
+        throwable.getMessage() != null ? throwable.getMessage() : "Fallback GetCursosByPersona Curso",
+        throwable.getClass().getSimpleName(),
+        throwable.getCause() != null ? throwable.getCause().toString() : "N/A",
+        "N/A",
+        "No se han podido obtener los cursos para la persona con id: " + idPersona,
+        "N/A");
+
+    return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
+        .body(List.of(fallbackResponse));
+  }
 }

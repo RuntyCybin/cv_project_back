@@ -1,0 +1,96 @@
+package com.cybindev.experiencia.service.impl;
+
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+
+import com.cybindev.experiencia.domain.Experiencia;
+import com.cybindev.experiencia.domain.ExperienciaResponseDTO;
+import com.cybindev.experiencia.domain.ExperienciaResponseMapper;
+import com.cybindev.experiencia.domain.PersonaExperiencia;
+import com.cybindev.experiencia.domain.PersonaExperienciaRequestDTO;
+import com.cybindev.experiencia.domain.PersonaExperienciaRequestMapper;
+import com.cybindev.experiencia.domain.PersonaExperienciaResponseDTO;
+import com.cybindev.experiencia.domain.PersonaExperienciaResponseMapper;
+import com.cybindev.experiencia.repository.ExperienciaRepo;
+import com.cybindev.experiencia.repository.PersonaExperienciaRepo;
+import com.cybindev.experiencia.service.PersonaExperienciaService;
+
+@Service
+public class PersonaExperienciaServiceImpl
+    implements PersonaExperienciaService<PersonaExperienciaResponseDTO, PersonaExperienciaRequestDTO> {
+
+  private final Logger logger = LoggerFactory.getLogger(PersonaExperienciaServiceImpl.class);
+  private final PersonaExperienciaRequestMapper requestMapper;
+  private final PersonaExperienciaResponseMapper responseMapper;
+  private final PersonaExperienciaRepo repo;
+  private final ExperienciaRepo experienciaRepo;
+  private final ExperienciaResponseMapper experienciaResponseMapper;
+
+  public PersonaExperienciaServiceImpl(PersonaExperienciaRequestMapper requestMapper,
+      PersonaExperienciaResponseMapper responseMapper,
+      PersonaExperienciaRepo repo,
+      ExperienciaRepo experienciaRepo,
+      ExperienciaResponseMapper experienciaResponseMapper) {
+    this.requestMapper = requestMapper;
+    this.responseMapper = responseMapper;
+    this.repo = repo;
+    this.experienciaRepo = experienciaRepo;
+    this.experienciaResponseMapper = experienciaResponseMapper;
+  }
+
+  @Override
+  public PersonaExperienciaResponseDTO crearPersonaExperiencia(PersonaExperienciaRequestDTO personaExperiencia) {
+    if (null == personaExperiencia) {
+      throw new IllegalArgumentException("El DTO personaExperiencia no puede ser nulo");
+    }
+    logger.info("Creando experiencia para persona: {}", personaExperiencia.personaId());
+
+    return Optional.ofNullable(personaExperiencia)
+        .map(this.requestMapper::toEntity)
+        .map(repo::save)
+        .map(this.responseMapper::toDTO)
+        .orElseThrow(() -> new RuntimeException("El DTO personaExperiencia no puede ser nulo"));
+  }
+
+  @Override
+  public PersonaExperienciaResponseDTO obtenerPersonaExperienciaPorId(Long id) {
+    if (id <= 0) {
+      throw new IllegalArgumentException("El ID de la experiencia debe ser un número positivo");
+    }
+    logger.info("Obteniendo experiencia por ID: {}", id);
+
+    return this.repo.findById(id)
+        .map(this.responseMapper::toDTO)
+        .orElseThrow(() -> new RuntimeException("No se encontró la experiencia con id: " + id));
+  }
+
+  @Override
+  public List<ExperienciaResponseDTO> obtenerExperienciasPorPersonaId(Long personaId) {
+    if (personaId <= 0) {
+      throw new IllegalArgumentException("El ID de la persona debe ser un número positivo");
+    }
+    logger.info("Obteniendo experiencias para persona con id: {}", personaId);
+
+    List<PersonaExperiencia> personaExperiencias = this.repo.findByPersonaId(personaId);
+
+    if (personaExperiencias.isEmpty()) {
+      throw new RuntimeException("No se encontraron experiencias para la persona con id: " + personaId);
+    }
+
+    List<Long> experienciaIds = personaExperiencias.stream()
+        .map(pe -> pe.getExperienciaId())
+        .toList();
+
+    List<Experiencia> experiencias = this.experienciaRepo.findAllById(Objects.requireNonNull(experienciaIds));
+
+    return experiencias.stream()
+        .map(this.experienciaResponseMapper::toDto)
+        .toList();
+  }
+
+}
