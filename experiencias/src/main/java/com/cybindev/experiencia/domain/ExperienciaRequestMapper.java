@@ -1,4 +1,4 @@
-package com.cybindev.cvproject.domain;
+package com.cybindev.experiencia.domain;
 
 import org.springframework.stereotype.Component;
 

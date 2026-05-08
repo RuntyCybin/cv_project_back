@@ -1,8 +1,8 @@
-package com.cybindev.cvproject.service;
+package com.cybindev.experiencia.service;
 
 import java.util.List;
 
-import com.cybindev.cvproject.domain.ExperienciaResponseDTO;
+import com.cybindev.experiencia.domain.ExperienciaResponseDTO;
 
 public interface PersonaExperienciaService<O, I> {
   O crearPersonaExperiencia(I personaExperiencia);

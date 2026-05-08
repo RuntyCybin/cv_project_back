@@ -1,4 +1,4 @@
-package com.cybindev.cvproject.controller;
+package com.cybindev.experiencia.controller;
 
 import java.util.List;
 
@@ -17,12 +17,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cybindev.cvproject.domain.ExperienciaRequestDTO;
-import com.cybindev.cvproject.domain.ExperienciaResponseDTO;
-import com.cybindev.cvproject.domain.PersonaExperienciaRequestDTO;
-import com.cybindev.cvproject.domain.PersonaExperienciaResponseDTO;
-import com.cybindev.cvproject.service.ExperienciaService;
-import com.cybindev.cvproject.service.PersonaExperienciaService;
+import com.cybindev.experiencia.domain.ExperienciaRequestDTO;
+import com.cybindev.experiencia.domain.ExperienciaResponseDTO;
+import com.cybindev.experiencia.domain.PersonaExperienciaRequestDTO;
+import com.cybindev.experiencia.domain.PersonaExperienciaResponseDTO;
+import com.cybindev.experiencia.service.ExperienciaService;
+import com.cybindev.experiencia.service.PersonaExperienciaService;
 
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 

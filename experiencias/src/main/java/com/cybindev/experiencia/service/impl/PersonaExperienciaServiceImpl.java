@@ -1,4 +1,4 @@
-package com.cybindev.cvproject.service.impl;
+package com.cybindev.experiencia.service.impl;
 
 import java.util.List;
 import java.util.Objects;
@@ -8,17 +8,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import com.cybindev.cvproject.domain.Experiencia;
-import com.cybindev.cvproject.domain.ExperienciaResponseDTO;
-import com.cybindev.cvproject.domain.ExperienciaResponseMapper;
-import com.cybindev.cvproject.domain.PersonaExperiencia;
-import com.cybindev.cvproject.domain.PersonaExperienciaRequestDTO;
-import com.cybindev.cvproject.domain.PersonaExperienciaRequestMapper;
-import com.cybindev.cvproject.domain.PersonaExperienciaResponseDTO;
-import com.cybindev.cvproject.domain.PersonaExperienciaResponseMapper;
-import com.cybindev.cvproject.repository.ExperienciaRepo;
-import com.cybindev.cvproject.repository.PersonaExperienciaRepo;
-import com.cybindev.cvproject.service.PersonaExperienciaService;
+import com.cybindev.experiencia.domain.Experiencia;
+import com.cybindev.experiencia.domain.ExperienciaResponseDTO;
+import com.cybindev.experiencia.domain.ExperienciaResponseMapper;
+import com.cybindev.experiencia.domain.PersonaExperiencia;
+import com.cybindev.experiencia.domain.PersonaExperienciaRequestDTO;
+import com.cybindev.experiencia.domain.PersonaExperienciaRequestMapper;
+import com.cybindev.experiencia.domain.PersonaExperienciaResponseDTO;
+import com.cybindev.experiencia.domain.PersonaExperienciaResponseMapper;
+import com.cybindev.experiencia.repository.ExperienciaRepo;
+import com.cybindev.experiencia.repository.PersonaExperienciaRepo;
+import com.cybindev.experiencia.service.PersonaExperienciaService;
 
 @Service
 public class PersonaExperienciaServiceImpl

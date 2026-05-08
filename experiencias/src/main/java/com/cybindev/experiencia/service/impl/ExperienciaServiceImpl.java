@@ -1,4 +1,4 @@
-package com.cybindev.cvproject.service.impl;
+package com.cybindev.experiencia.service.impl;
 
 import java.util.Optional;
 
@@ -12,13 +12,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.cybindev.cvproject.domain.Experiencia;
-import com.cybindev.cvproject.domain.ExperienciaRequestDTO;
-import com.cybindev.cvproject.domain.ExperienciaRequestMapper;
-import com.cybindev.cvproject.domain.ExperienciaResponseDTO;
-import com.cybindev.cvproject.domain.ExperienciaResponseMapper;
-import com.cybindev.cvproject.repository.ExperienciaRepo;
-import com.cybindev.cvproject.service.ExperienciaService;
+import com.cybindev.experiencia.domain.Experiencia;
+import com.cybindev.experiencia.domain.ExperienciaRequestDTO;
+import com.cybindev.experiencia.domain.ExperienciaRequestMapper;
+import com.cybindev.experiencia.domain.ExperienciaResponseDTO;
+import com.cybindev.experiencia.domain.ExperienciaResponseMapper;
+import com.cybindev.experiencia.repository.ExperienciaRepo;
+import com.cybindev.experiencia.service.ExperienciaService;
 
 @Service
 public class ExperienciaServiceImpl implements ExperienciaService<ExperienciaResponseDTO, ExperienciaRequestDTO> {
