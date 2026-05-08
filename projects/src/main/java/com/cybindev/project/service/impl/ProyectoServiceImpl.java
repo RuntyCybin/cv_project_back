@@ -1,8 +1,8 @@
-package com.cybindev.service.impl;
+package com.cybindev.project.service.impl;
 
-import com.cybindev.domain.*;
-import com.cybindev.repo.ProyectoRepo;
-import com.cybindev.service.ProyectoService;
+import com.cybindev.project.domain.*;
+import com.cybindev.project.repo.ProyectoRepo;
+import com.cybindev.project.service.ProyectoService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

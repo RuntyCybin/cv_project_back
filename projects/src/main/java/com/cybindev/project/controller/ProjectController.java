@@ -1,11 +1,11 @@
-package com.cybindev.controller;
+package com.cybindev.project.controller;
 
-import com.cybindev.domain.PersonaProyectoRequestDTO;
-import com.cybindev.domain.PersonaProyectoResponseDTO;
-import com.cybindev.domain.ProyectoRequestDTO;
-import com.cybindev.domain.ProyectoResponseDTO;
-import com.cybindev.service.PersonaProjectsService;
-import com.cybindev.service.ProyectoService;
+import com.cybindev.project.domain.PersonaProyectoRequestDTO;
+import com.cybindev.project.domain.PersonaProyectoResponseDTO;
+import com.cybindev.project.domain.ProyectoRequestDTO;
+import com.cybindev.project.domain.ProyectoResponseDTO;
+import com.cybindev.project.service.PersonaProjectsService;
+import com.cybindev.project.service.ProyectoService;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import jakarta.annotation.PostConstruct;
 import org.springframework.http.HttpStatus;

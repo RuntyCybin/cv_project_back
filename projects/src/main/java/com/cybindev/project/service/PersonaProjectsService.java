@@ -1,8 +1,8 @@
-package com.cybindev.service;
+package com.cybindev.project.service;
 
 import java.util.List;
 
-import com.cybindev.domain.ProyectoResponseDTO;
+import com.cybindev.project.domain.ProyectoResponseDTO;
 
 public interface PersonaProjectsService<O, I> {
   O crearPersonaProject(I personaProject);
