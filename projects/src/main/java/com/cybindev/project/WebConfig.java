@@ -1,4 +1,4 @@
-package com.cybindev;
+package com.cybindev.project;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.lang.NonNull;

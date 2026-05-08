@@ -1,4 +1,4 @@
-package com.cybindev.service.impl;
+package com.cybindev.project.service.impl;
 
 import java.util.List;
 import java.util.Objects;
@@ -9,17 +9,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import com.cybindev.domain.PersonaProyecto;
-import com.cybindev.domain.PersonaProyectoRequestDTO;
-import com.cybindev.domain.Project;
-import com.cybindev.domain.PersonaProyectoRequestMapper;
-import com.cybindev.domain.PersonaProyectoResponseDTO;
-import com.cybindev.domain.PersonaProyectoResponseMapper;
-import com.cybindev.domain.ProyectResponseMapper;
-import com.cybindev.domain.ProyectoResponseDTO;
-import com.cybindev.repo.PersonaProyectoRepo;
-import com.cybindev.repo.ProyectoRepo;
-import com.cybindev.service.PersonaProjectsService;
+import com.cybindev.project.domain.PersonaProyecto;
+import com.cybindev.project.domain.PersonaProyectoRequestDTO;
+import com.cybindev.project.domain.Project;
+import com.cybindev.project.domain.PersonaProyectoRequestMapper;
+import com.cybindev.project.domain.PersonaProyectoResponseDTO;
+import com.cybindev.project.domain.PersonaProyectoResponseMapper;
+import com.cybindev.project.domain.ProyectResponseMapper;
+import com.cybindev.project.domain.ProyectoResponseDTO;
+import com.cybindev.project.repo.PersonaProyectoRepo;
+import com.cybindev.project.repo.ProyectoRepo;
+import com.cybindev.project.service.PersonaProjectsService;
 
 @Service
 public class PersonaProjectsServiceImpl
