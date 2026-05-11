@@ -156,4 +156,25 @@ public class CursosController {
     return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
         .body(List.of(fallbackResponse));
   }
+
+  /*
+   * ------------------------------------------
+   * POST PERSONA-CURSOS
+   * ------------------------------------------
+   */
+  @PostMapping("/persona-curso")
+  @CircuitBreaker(name = "postPersonaCursoService", fallbackMethod = "fallbackPostPersonaCurso")
+  public ResponseEntity<PersonaCursoResponseDTO> postPersonaCurso(@RequestBody PersonaCursoRequestDTO request) {
+    PersonaCursoResponseDTO response = this.personaCursoService.crearPersonaCurso(request);
+    return ResponseEntity.status(HttpStatus.OK)
+        .body(response);
+  }
+
+  public ResponseEntity<PersonaCursoResponseDTO> fallbackPostPersonaCurso(@RequestBody PersonaCursoRequestDTO request,
+      Throwable throwable) {
+    PersonaCursoResponseDTO fallbackResponse = new PersonaCursoResponseDTO(-1L, -1L, -1L);
+
+    return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
+        .body(fallbackResponse);
+  }
 }
