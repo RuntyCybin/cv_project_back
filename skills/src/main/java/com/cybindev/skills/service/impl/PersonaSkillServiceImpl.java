@@ -13,7 +13,6 @@ import com.cybindev.skills.domain.PersonaSkillRequestDTO;
 import com.cybindev.skills.domain.PersonaSkillResponseDTO;
 import com.cybindev.skills.domain.Skill;
 import com.cybindev.skills.domain.SkillMapper;
-import com.cybindev.skills.domain.SkillRequestDTO;
 import com.cybindev.skills.domain.SkillResponseDTO;
 import com.cybindev.skills.repo.PersonaSkillRepo;
 import com.cybindev.skills.repo.SkillRepo;
