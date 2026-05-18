@@ -124,3 +124,19 @@ services:
       redis:
         condition: service_healthy
     restart: unless-stopped
+
+  skills:
+    build:
+      context: .
+      dockerfile: skills/Dockerfile
+    ports:
+      - "8088:8088"
+    environment:
+      - SPRING_PROFILES_ACTIVE=default
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://host.docker.internal:5432/cvdbnico
+      - SPRING_DATASOURCE_USERNAME=cvdbnicouser
+      - SPRING_DATASOURCE_PASSWORD=Gardian@2
+    depends_on:
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
