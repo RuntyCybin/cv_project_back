@@ -1,5 +1,8 @@
 package com.cybindev.skills.domain;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class PersonaSkillMapper {
   public PersonaSkill toEntity(PersonaSkillRequestDTO dto) {
     if (dto == null) {
