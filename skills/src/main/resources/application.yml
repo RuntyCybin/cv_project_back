@@ -1,0 +1,35 @@
+spring:
+  application:
+    name: skills
+  datasource:
+    url: jdbc:postgresql://localhost:5432/cvdbnico
+    username: cvdbnicouser
+    password: Gardian@2
+    driver-class-name: org.postgresql.Driver
+    schema: cvdbnicoschema
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        default_schema: cvdbnicoschema
+server:
+  port: 8088
+  servlet:
+    context-path: /cv
+
+app:
+  title: CV Project Application
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      estudiosService:
+        registerHealthIndicator: true
+        slidingWindowSize: 10
+        minimumNumberOfCalls: 5
+        failureRateThreshold: 50
+        waitDurationInOpenState: 10000
+        permittedNumberOfCallsInHalfOpenState: 3
+        slidingWindowType: COUNT_BASED

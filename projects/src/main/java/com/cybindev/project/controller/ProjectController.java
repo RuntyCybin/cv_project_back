@@ -75,7 +75,7 @@ public class ProjectController {
 
   /*
    * ------------------------------------------
-   * POST PROYECTOS
+   * POST PROYECTO
    * ------------------------------------------
    */
   @PostMapping
