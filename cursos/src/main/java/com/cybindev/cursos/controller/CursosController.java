@@ -1,7 +1,10 @@
 package com.cybindev.cursos.controller;
 
 import java.util.List;
+import java.util.Objects;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,7 +27,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RestController
 @RequestMapping("/cursos")
 public class CursosController {
-
+  private final Logger logger = LoggerFactory.getLogger(CursosController.class);
   private final CursoService<CursoResponseDTO, CursoRequestDTO> cursoService;
   private final PersonaCursoService<PersonaCursoResponseDTO, PersonaCursoRequestDTO> personaCursoService;
 
@@ -37,7 +40,7 @@ public class CursosController {
 
   @PostConstruct
   public void init() {
-    System.out.println("Cursos Controller initialized");
+    logger.info("Cursos Controller initialized");
   }
 
   /*
@@ -47,6 +50,7 @@ public class CursosController {
    */
   @GetMapping
   public ResponseEntity<String> health() {
+    logger.info("Health check requested");
     return ResponseEntity.status(HttpStatus.OK)
         .body("Cursos controller is healthy");
   }
@@ -59,11 +63,13 @@ public class CursosController {
   @GetMapping("/all")
   @CircuitBreaker(name = "getAllCursosService", fallbackMethod = "fallbackGetAll")
   public ResponseEntity<List<CursoResponseDTO>> getCursos() {
+    logger.info("Received request to fetch all cursos");
     return ResponseEntity.status(HttpStatus.OK)
         .body(cursoService.listarCursos());
   }
 
   public ResponseEntity<List<CursoResponseDTO>> fallbackGetAll(Throwable throwable) {
+    logger.error("Error occurred while fetching all cursos", throwable);
     return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
         .body(List.of(new CursoResponseDTO(
             -1L,
@@ -83,12 +89,14 @@ public class CursosController {
   @PostMapping
   @CircuitBreaker(name = "postCursoService", fallbackMethod = "fallbackPostCurso")
   public ResponseEntity<CursoResponseDTO> postCurso(@RequestBody CursoRequestDTO request) {
+    logger.info("Received request to create curso: {}", Objects.requireNonNull(request));
     CursoResponseDTO response = this.cursoService.crearCurso(request);
     return ResponseEntity.status(HttpStatus.OK)
         .body(response);
   }
 
   public ResponseEntity<CursoResponseDTO> fallbackPostCurso(@RequestBody CursoRequestDTO request, Throwable throwable) {
+    logger.error("Error occurred while creating curso", throwable);
     CursoResponseDTO fallbackResponse = new CursoResponseDTO(
         -1L,
         throwable.getMessage() != null ? throwable.getMessage() : "Fallback Post Curso",
@@ -110,12 +118,17 @@ public class CursosController {
   @GetMapping("/{id}")
   @CircuitBreaker(name = "getCursoByIdService", fallbackMethod = "fallbackGetById")
   public ResponseEntity<CursoResponseDTO> getCursoById(@PathVariable Long id) {
+    if (id <= 0) {
+      throw new IllegalArgumentException("El ID debe ser un número positivo");
+    }
+    logger.info("Received request to fetch curso by ID: {}", id);
     CursoResponseDTO response = this.cursoService.obtenerCursoPorId(id);
     return ResponseEntity.status(HttpStatus.OK)
         .body(response);
   }
 
   public ResponseEntity<CursoResponseDTO> fallbackGetById(@PathVariable Long id, Throwable throwable) {
+    logger.error("Error occurred while fetching curso by ID: {}", id, throwable);
     CursoResponseDTO fallbackResponse = new CursoResponseDTO(
         -1L,
         throwable.getMessage() != null ? throwable.getMessage() : "Fallback GetCursoById Curso",
@@ -137,6 +150,10 @@ public class CursosController {
   @GetMapping("/persona/{idPersona}")
   @CircuitBreaker(name = "getCursosByPersonaService", fallbackMethod = "fallbackGetCursosByPersona")
   public ResponseEntity<List<CursoResponseDTO>> getCursosByPersona(@PathVariable Long idPersona) {
+    if (idPersona <= 0) {
+      throw new IllegalArgumentException("El ID de persona debe ser un número positivo");
+    }
+    logger.info("Received request to fetch cursos by persona ID: {}", idPersona);
     List<CursoResponseDTO> response = this.personaCursoService.obtenerCursosPorPersonaId(idPersona);
     return ResponseEntity.status(HttpStatus.OK)
         .body(response);
@@ -144,6 +161,7 @@ public class CursosController {
 
   public ResponseEntity<List<CursoResponseDTO>> fallbackGetCursosByPersona(@PathVariable Long idPersona,
       Throwable throwable) {
+    logger.error("Error occurred while fetching cursos by persona ID: {}", idPersona, throwable);
     CursoResponseDTO fallbackResponse = new CursoResponseDTO(
         -1L,
         throwable.getMessage() != null ? throwable.getMessage() : "Fallback GetCursosByPersona Curso",
@@ -155,5 +173,28 @@ public class CursosController {
 
     return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
         .body(List.of(fallbackResponse));
+  }
+
+  /*
+   * ------------------------------------------
+   * POST PERSONA-CURSOS
+   * ------------------------------------------
+   */
+  @PostMapping("/persona-curso")
+  @CircuitBreaker(name = "postPersonaCursoService", fallbackMethod = "fallbackPostPersonaCurso")
+  public ResponseEntity<PersonaCursoResponseDTO> postPersonaCurso(@RequestBody PersonaCursoRequestDTO request) {
+    logger.info("Received request to create persona-curso: {}", Objects.requireNonNull(request));
+    PersonaCursoResponseDTO response = this.personaCursoService.crearPersonaCurso(request);
+    return ResponseEntity.status(HttpStatus.OK)
+        .body(response);
+  }
+
+  public ResponseEntity<PersonaCursoResponseDTO> fallbackPostPersonaCurso(@RequestBody PersonaCursoRequestDTO request,
+      Throwable throwable) {
+    logger.error("Error occurred while creating persona-curso", throwable);
+    PersonaCursoResponseDTO fallbackResponse = new PersonaCursoResponseDTO(-1L, -1L, -1L);
+
+    return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
+        .body(fallbackResponse);
   }
 }

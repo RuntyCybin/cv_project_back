@@ -24,6 +24,7 @@
 		<module>persona</module>
 		<module>autenticacion</module>
 		<module>api-gateway</module>
+		<module>skills</module>
 	</modules>
 
 	<properties>

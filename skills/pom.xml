@@ -3,19 +3,17 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-
   <parent>
     <groupId>com.cybindev</groupId>
     <artifactId>cvproject-parent</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <relativePath>../pom.xml</relativePath>
   </parent>
 
   <groupId>com.cybindev</groupId>
-  <artifactId>projects</artifactId>
+  <artifactId>skills</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  <name>projects</name>
-  <description>Modulo para gestiornar los proyectos trabajados</description>
+  <name>skills</name>
+  <description>Modulo para gestionar las habilidades de los empleados</description>
   <packaging>jar</packaging>
 
   <dependencies>

@@ -4,7 +4,7 @@ Backend solution to the CV project
 
 ## ¿Porque docker-compose.yml esta fuera?
 
-docker-compose.yml esta en la fuera del directorio del proyecto porque el docker-compose.yml suele orquestar servicios de todo el repo (p.ej. backend, futuras bases de datos, front), no solo la app de experiencias. Desde la raíz puede construir ./experiencias/Dockerfile y exponer puertos sin acoplarse a una sola subcarpeta, manteniendo la ruta de contexto limpia y permitiendo añadir otros servicios en el mismo compose más adelante.
+docker-compose.yml esta fuera del directorio del proyecto porque suele orquestar servicios de todo el repo (p.ej. backend, futuras bases de datos, front), no solo la app de experiencias. Desde la raíz puede construir ./experiencias/Dockerfile y exponer puertos sin acoplarse a una sola subcarpeta, manteniendo la ruta de contexto limpia y permitiendo añadir otros servicios en el mismo compose más adelante.
 
 En este docker compose no se va a agregar ningun serivcio mas. La parte front tiene su docker compose y la base de datos tendra el suyo.
 Esta solucion viene dada porque es mas sencillo debuguear y probar cambios en el proyecto.
@@ -32,9 +32,31 @@ Desde la raiz de README.MD
 ```bash
   cd experiencias
   mvn clean install
-
 ```
 
+## Instalacion de un nuevo modulo
+
+1. Crear el nuevo modulo en VSCode:
+   - `Command + Shift + P` → Escribir: **Maven: New Module**
+   - Seleccionar el parent: `cvproject-parent`
+   - Dar nombre al modulo
+
+2. Configurar la clase principal:
+   - Añadir la anotacion `@SpringBootApplication`
+   - Añadir `SpringApplication.run(Main.class, args);` en el metodo `main`
+
+3. Añadir la clase `WebConfig`:
+   - Es necesaria para enrutar las llamadas del frontend al puerto `8081`
+
+4. Registrar el servicio en `docker-compose.yml`
+
+5. Añadir la ruta del modulo en el `application.yml` del `api-gateway`
+6. Ejecutar:
+```bash
+  mvn -pl [name_of_module] -am clean install -DskipTests
+  mvn clean install -DskipTests
+  docker-compose down && docker-compose up --build
+```
 
 
 
@@ -60,6 +82,7 @@ Guia de puertos del proyecto
   8085 : API estudios
   8086 : API cursos 
   8087 : API projects
+  8088 : API skills
 ```
 
 
