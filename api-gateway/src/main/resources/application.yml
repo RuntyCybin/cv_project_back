@@ -39,6 +39,11 @@ spring:
           predicates:
             - Path=/cv/projects/**
 
+        - id: skills
+          uri: http://skills:8088
+          predicates:
+            - Path=/cv/skills/**
+
 server:
   port: 8080
 

@@ -33,15 +33,18 @@ public class JwtAuthFilter implements GlobalFilter, Ordered {
 
   @Override
   public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
+    logger.info("API-GATEWAY-INFO: Filtrando solicitud para la ruta: {}", exchange.getRequest().getURI().getPath());
     String path = exchange.getRequest().getURI().getPath();
 
     if (esRutaPublica(path)) {
+      logger.info("API-GATEWAY-INFO: Ruta es pública, permitiendo acceso: {}", path);
       return chain.filter(exchange);
     }
 
     String authHeader = exchange.getRequest().getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
 
     if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+      logger.warn("API-GATEWAY-WARN: Acceso denegado, token no proporcionado o inválido: {}", path);
 
       exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
       return exchange.getResponse().setComplete();
@@ -50,6 +53,7 @@ public class JwtAuthFilter implements GlobalFilter, Ordered {
     String token = authHeader.substring(7);
 
     if (!esValido(token)) {
+      logger.warn("API-GATEWAY-WARN: Acceso denegado, token inválido: {}", path);
       exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
       return exchange.getResponse().setComplete();
     }
@@ -57,6 +61,7 @@ public class JwtAuthFilter implements GlobalFilter, Ordered {
   }
 
   private boolean esRutaPublica(String path) {
+    logger.info("API-GATEWAY-INFO: Verificando si la ruta es pública: {}", path);
     return RUTAS_PUBLICAS.stream().anyMatch(path::startsWith);
   }
 
@@ -66,7 +71,7 @@ public class JwtAuthFilter implements GlobalFilter, Ordered {
       Jwts.parser().verifyWith(key).build().parseSignedClaims(token);
       return true;
     } catch (Exception e) {
-      logger.error("::::::::::::::::::EXCEPTION: " + e.getMessage());
+      logger.error("API-GATEWAY-EXCEPTION: " + e.getMessage());
       return false;
     }
   }
