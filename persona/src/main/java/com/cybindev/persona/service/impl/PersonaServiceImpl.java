@@ -60,8 +60,8 @@ public class PersonaServiceImpl implements PersonaService<PersonaResponseDTO, Pe
   @Override
   @Cacheable(value = "personaCache", key = "#id")
   public PersonaResponseDTO obtenerPersonaPorId(Long id) {
-    logger.info("Servicio obtener persona por id: " + id);
     if (id > 0L) {
+      logger.info("Servicio obtener persona por id: " + id);
       Persona persona = this.personaRepo.findById(id)
           .orElseThrow(() -> new RuntimeException("Persona no encontrada con id: " + id));
       return this.personaResponseMapper.toDTO(persona);

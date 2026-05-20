@@ -54,11 +54,13 @@ public class PersonaSkillServiceImpl implements PersonaSkillService<PersonaSkill
   @Override
   public List<SkillResponseDTO> obtenerSkillsPorPersonaId(Long id) {
     if (id <= 0) {
-      logger.info("Obteniendo skills por personaId: " + id);
+      logger.error("API-GATEWAY-EXCEPTION: Id de persona inválido: {}", id);
+      throw new RuntimeException("Id de persona inválido");
     }
 
     List<PersonaSkill> personaSkills = this.repo.findByPersonaId(id);
     if (personaSkills.isEmpty()) {
+      logger.error("API-GATEWAY-EXCEPTION: No se han recogido skills para la persona con id: {}", id);
       throw new RuntimeException("No se han recogido skills para la persona con id: " + id);
     }
 
