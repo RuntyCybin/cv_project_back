@@ -8,6 +8,5 @@ public class EstudiosApplication {
 
   public static void main(String[] args) {
     SpringApplication.run(EstudiosApplication.class, args);
-    System.out.println("Estudios Application Started Successfully");
   }
 }
