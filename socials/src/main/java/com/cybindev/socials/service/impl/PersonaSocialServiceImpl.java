@@ -41,10 +41,11 @@ public class PersonaSocialServiceImpl
     Objects.requireNonNull(personaRedSocial, "request can not be null");
     logger.info("Servicio de crear relacion persona-social: {}", personaRedSocial);
 
-    socialsRepo.findById(personaRedSocial.socialId()).orElseThrow(() -> {
-      logger.warn("No social found with ID: {}", personaRedSocial.socialId());
-      return new IllegalArgumentException("No social found with ID: " + personaRedSocial.socialId());
-    });
+    socialsRepo.findById(Objects.requireNonNull(personaRedSocial.socialId(), "Social ID cannot be null"))
+        .orElseThrow(() -> {
+          logger.warn("No social found with ID: {}", personaRedSocial.socialId());
+          return new IllegalArgumentException("No social found with ID: " + personaRedSocial.socialId());
+        });
 
     PersonaSocial personaSocial = repo.save(this.mapper.toEntity(personaRedSocial));
 
