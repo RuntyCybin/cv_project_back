@@ -73,7 +73,8 @@ public class PersonaSocialServiceImpl
         .map(personaSocial -> personaSocial.getSocialId())
         .toList();
 
-    List<Social> socials = this.socialsRepo.findAllById(Objects.requireNonNull(socialIds, "Social IDs cannot be null"));
+    List<Social> socials = this.socialsRepo.findAllById(
+        Objects.requireNonNull(socialIds, "Social IDs cannot be null"));
 
     return socials.stream().map(this.socialMapper::toResponseDTO).toList();
   }
