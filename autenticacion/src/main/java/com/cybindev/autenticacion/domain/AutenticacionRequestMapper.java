@@ -1,9 +1,11 @@
 package com.cybindev.autenticacion.domain;
 
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
 @Component
 public class AutenticacionRequestMapper {
+  @NonNull
   public Autenticacion toAutenticacion(AutenticacionRequestDTO autenticacionRequestDTO) {
     Autenticacion autenticacion = new Autenticacion();
     autenticacion.setLogin(autenticacionRequestDTO.login());

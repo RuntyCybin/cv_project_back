@@ -25,6 +25,7 @@
 		<module>autenticacion</module>
 		<module>api-gateway</module>
 		<module>skills</module>
+		<module>socials</module>
 	</modules>
 
 	<properties>
