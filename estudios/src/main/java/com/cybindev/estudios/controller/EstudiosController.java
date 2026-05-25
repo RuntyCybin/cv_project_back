@@ -81,6 +81,7 @@ public class EstudiosController {
    * ------------------------------------------
    */
   @PostMapping
+  @CircuitBreaker(name = "postEstudioService", fallbackMethod = "fallbackPostEstudio")
   public ResponseEntity<EstudioResponseDTO> postEstudio(@RequestBody EstudioRequestDTO estudio) {
     EstudioResponseDTO creado = estudioService.crearEstudio(estudio);
     return ResponseEntity.status(HttpStatus.CREATED)
